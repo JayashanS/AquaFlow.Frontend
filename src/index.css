@@ -34,6 +34,7 @@ body {
   flex-direction: row;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 .left-section {
@@ -42,8 +43,10 @@ body {
 }
 
 .right-section {
-  flex: 3;
+  flex: 4;
   background-color: #ffffff;
+  overflow: auto;
+  max-height: 95vh;
 }
 
 @media (max-width: 960px) {

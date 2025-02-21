@@ -13,4 +13,19 @@ export interface FishFarmFilters {
 export interface LeftPaneProps {
   selectedFarmId: number;
   setSelectedFarmId: (id: number) => void;
+  seteSelectedFarmData: (data: FishFarm) => void;
+}
+
+export interface FishFarm {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  numberOfCages: number;
+  hasBarge: boolean;
+  pictureUrl: string;
+}
+
+export interface RightPaneProps {
+  farm: FishFarm;
 }

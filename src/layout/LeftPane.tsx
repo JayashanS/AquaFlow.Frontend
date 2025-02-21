@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useFishFarms } from "../hooks/useFishFarms";
-import { FishFarmFilters, LeftPaneProps } from "../interfaces/fishFarm";
+import {
+  FishFarm,
+  FishFarmFilters,
+  LeftPaneProps,
+} from "../interfaces/fishFarm";
 import {
   Box,
   Paper,
@@ -20,6 +24,7 @@ import Pagination from "@mui/material/Pagination";
 const LeftPane: React.FC<LeftPaneProps> = ({
   selectedFarmId,
   setSelectedFarmId,
+  seteSelectedFarmData,
 }) => {
   const [filters, setFilters] = useState<FishFarmFilters>({
     name: "",
@@ -54,13 +59,29 @@ const LeftPane: React.FC<LeftPaneProps> = ({
     setSelectedFarmId(farmId);
   };
 
+  // Combined useEffect hook to handle refetching and selected farm logic
   useEffect(() => {
-    refetch();
-  }, [filters, refetch]);
+    if (data?.fishFarms?.length) {
+      // Set the first farm as the selected farm if not already selected
+      if (!selectedFarmId) {
+        setSelectedFarmId(data.fishFarms[0].id);
+      }
 
-  useEffect(() => {
-    setSelectedFarmId(data?.fishFarms?.[0]?.id);
-  }, [data]);
+      // Set the selected farm data
+      seteSelectedFarmData(
+        data.fishFarms.find((farm: FishFarm) => farm.id === selectedFarmId)
+      );
+    }
+
+    refetch(); // Refetch whenever filters change
+  }, [
+    data,
+    filters,
+    selectedFarmId,
+    setSelectedFarmId,
+    seteSelectedFarmData,
+    refetch,
+  ]);
 
   return (
     <Box

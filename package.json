@@ -12,18 +12,23 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^4.1.0",
     "@mui/icons-material": "^6.4.5",
     "@mui/material": "^6.4.5",
+    "@mui/x-date-pickers": "^7.27.0",
     "@tanstack/react-query": "^5.66.8",
     "@tanstack/react-query-devtools": "^5.66.8",
     "@types/react-easy-crop": "^1.16.0",
     "axios": "^1.7.9",
     "cropperjs": "^1.6.2",
+    "date-fns": "^4.1.0",
     "ol": "^10.4.0",
     "react": "^19.0.0",
     "react-cropper": "^2.3.3",
     "react-dom": "^19.0.0",
-    "react-easy-crop": "^5.2.0"
+    "react-easy-crop": "^5.2.0",
+    "react-hook-form": "^7.54.2",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

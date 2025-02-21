@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Typography, Grid } from "@mui/material";
+import { RightPaneProps } from "../interfaces/fishFarm";
+import { Typography, Grid2 } from "@mui/material";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
@@ -10,20 +11,6 @@ import { Vector as VectorSource } from "ol/source";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
 
-interface FarmData {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  numberOfCages: number;
-  hasBarge: boolean;
-  pictureUrl: string;
-}
-
-interface RightPaneProps {
-  farm: FarmData;
-}
-
 const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [mapError, setMapError] = useState<string | null>(null);
@@ -32,6 +19,11 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
     let map: Map | null = null;
 
     try {
+      if (!farm) {
+        setMapError("Farm data is not available");
+        return;
+      }
+
       if (!mapContainerRef.current) {
         setMapError("Map container not found");
         return;
@@ -82,43 +74,59 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
         map = null;
       }
     };
-  }, [farm.latitude, farm.longitude]);
+  }, [farm]);
 
   return (
-    <div style={{ padding: "16px" }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
-          <img
-            src={`http://localhost:5082${farm.pictureUrl}`}
-            alt={farm.name}
-            style={{ width: "100%", height: "auto" }}
-          />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Typography variant="h6">{farm.name}</Typography>
-          <Typography variant="body1">
-            <strong>Number of Cages:</strong> {farm.numberOfCages}
-          </Typography>
-          <Typography variant="body1">
-            <strong>Has Barge:</strong> {farm.hasBarge ? "Yes" : "No"}
-          </Typography>
-          {mapError && (
-            <Typography color="error">Map Error: {mapError}</Typography>
-          )}
-        </Grid>
-      </Grid>
+    <Grid2 container direction={"column"} sx={{ border: "solid 1px black" }}>
+      <Grid2
+        container
+        size={{ xs: 12, md: 12 }}
+        sx={{ borderBottom: "solid 1px black" }}
+      >
+        <Typography variant="h6">{farm.name}</Typography>
+      </Grid2>
+      <Grid2 container size={{ xs: 12, md: 12 }}>
+        <Grid2
+          container
+          size={{ xs: 12, md: 8 }}
+          direction={"column"}
+          sx={{ borderRight: "solid 1px black" }}
+        >
+          <Grid2 size={{ xs: 12, md: 8 }}>
+            <Typography variant="body1">
+              <strong>Number of Cages:</strong> {farm.numberOfCages}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Has Barge:</strong> {farm.hasBarge ? "Yes" : "No"}
+            </Typography>
+            {mapError && (
+              <Typography color="error">Map Error: {mapError}</Typography>
+            )}
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <img
+              src={`http://localhost:5082${farm.pictureUrl}`}
+              alt={farm.name}
+              style={{ width: "100%", height: "auto" }}
+            />
+          </Grid2>
 
-      <div
-        ref={mapContainerRef}
-        style={{
-          width: "100%",
-          height: "400px",
-          backgroundColor: "#f0f0f0",
-          position: "relative",
-          marginTop: "16px",
-        }}
-      />
-    </div>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <div
+              ref={mapContainerRef}
+              style={{
+                width: "100%",
+                height: "400px",
+                backgroundColor: "#f0f0f0",
+                position: "relative",
+                marginTop: "16px",
+              }}
+            />
+          </Grid2>
+        </Grid2>
+        <Grid2 container size={{ xs: 12, md: 4 }}></Grid2>
+      </Grid2>
+    </Grid2>
   );
 };
 

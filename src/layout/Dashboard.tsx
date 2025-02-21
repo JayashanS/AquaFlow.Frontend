@@ -2,9 +2,20 @@ import React, { useState } from "react";
 import Grid2 from "@mui/material/Grid2";
 import LeftPane from "./LeftPane";
 import RightPane from "./RightPane";
+import WorkerForm from "../components/WorkerForm";
+import { FishFarm } from "../interfaces/fishFarm";
 
 const Dashboard: React.FC = () => {
   const [selectedFarmId, setSelectedFarmId] = useState<number>(1);
+  const [selectedFarmData, setSelectedFarmData] = useState<FishFarm>({
+    id: 8,
+    name: "asd",
+    latitude: 40.7128,
+    longitude: -74.006,
+    numberOfCages: 0,
+    hasBarge: true,
+    pictureUrl: "/uploads/fishfarms/1adb5557-7a14-4164-8d43-3c134e543748.jpg",
+  });
 
   return (
     <Grid2
@@ -25,6 +36,7 @@ const Dashboard: React.FC = () => {
         <LeftPane
           selectedFarmId={selectedFarmId}
           setSelectedFarmId={setSelectedFarmId}
+          seteSelectedFarmData={setSelectedFarmData}
         />
       </Grid2>
       <Grid2
@@ -33,22 +45,12 @@ const Dashboard: React.FC = () => {
           backgroundColor: "#ffffff",
           overflow: "auto",
           maxHeight: "95vh",
-          padding: { xs: "0 0 20px 20px", md: "0 0 60px 60px" },
+          padding: { xs: "0 0 20px 20px", md: "40px" },
           flexGrow: 1,
         }}
       >
-        <RightPane
-          farm={{
-            id: 8,
-            name: "asd",
-            latitude: 40.7128,
-            longitude: -74.006,
-            numberOfCages: 0,
-            hasBarge: true,
-            pictureUrl:
-              "/uploads/fishfarms/1adb5557-7a14-4164-8d43-3c134e543748.jpg",
-          }}
-        />
+        {/* {selectedFarmData && <RightPane farm={selectedFarmData} />} */}
+        <WorkerForm />
       </Grid2>
     </Grid2>
   );

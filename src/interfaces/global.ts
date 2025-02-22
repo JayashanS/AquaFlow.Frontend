@@ -7,3 +7,11 @@ export interface OptionsPaneProps {
   setMode: (mode: Mode) => void;
   handleFilterChange: (props: HandleFilterChangeProps) => void;
 }
+
+export interface ImageCropperProps {
+  onPictureChange: (croppedImage: File | null) => void;
+}
+
+export interface FishFarmFormProps {
+  setMode: (mode: Mode) => void;
+}

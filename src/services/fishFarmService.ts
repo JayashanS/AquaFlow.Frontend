@@ -11,9 +11,27 @@ export const fetchFishFarms = async (filters: FishFarmFilters) => {
       params.append(key, String(value));
     }
   });
-  console.log(`${API_BASE_URL}/FishFarm/getByFilter?${params.toString()}`);
   const response = await axios.get(
     `${API_BASE_URL}/FishFarm/getByFilter?${params.toString()}`
   );
   return response.data;
+};
+
+export const createFishFarm = async (formData: FormData) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/FishFarm/create`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating fish farm:", error);
+    throw new Error("Failed to create fish farm");
+  }
 };

@@ -3,6 +3,7 @@ import { useFishFarms } from "../hooks/useFishFarms";
 import Grid2 from "@mui/material/Grid2";
 import LeftPane from "../layout/LeftPane2";
 import RightPane from "../layout/RightPane";
+import WorkerForm from "../components/FishFarmForm";
 import OptionsPane from "../components/OptionsPane";
 import {
   FishFarm,
@@ -61,35 +62,49 @@ const Dashboard: React.FC = () => {
           handleFilterChange={handleFilterChange}
         />
       </Grid2>
-      <Grid2
-        size={{ md: 3 }}
-        sx={{
-          backgroundColor: "#f7f6f9",
-          display: { xs: "none", md: "block" },
-        }}
-      >
-        <LeftPane
-          selectedFarmId={selectedFarmId}
-          setSelectedFarmId={setSelectedFarmId}
-          seteSelectedFarmData={setSelectedFarmData}
-          filters={filters}
-          handleFilterChange={handleFilterChange}
-          data={data}
-        />
-      </Grid2>
-      <Grid2
-        size={{ md: 9 }}
-        sx={{
-          backgroundColor: "#ffffff",
-          overflow: "auto",
-          maxHeight: "95vh",
-          padding: { xs: "0 0 20px 20px", md: "40px" },
-          flexGrow: 1,
-        }}
-      >
-        {selectedFarmData && <RightPane farm={selectedFarmData} />}
-        {/* <WorkerForm />  */}
-      </Grid2>
+      {mode === "view" && (
+        <>
+          <Grid2
+            size={{ md: 3 }}
+            sx={{
+              backgroundColor: "#f7f6f9",
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            <LeftPane
+              selectedFarmId={selectedFarmId}
+              setSelectedFarmId={setSelectedFarmId}
+              seteSelectedFarmData={setSelectedFarmData}
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+              data={data}
+            />
+          </Grid2>
+          <Grid2
+            size={{ md: 9 }}
+            sx={{
+              backgroundColor: "#ffffff",
+              overflow: "auto",
+              maxHeight: "95vh",
+              padding: { xs: "0 0 20px 20px", md: "40px" },
+              flexGrow: 1,
+            }}
+          >
+            {selectedFarmData && <RightPane farm={selectedFarmData} />}
+          </Grid2>
+        </>
+      )}
+      {mode === "create" && (
+        <Grid2
+          sx={{
+            height: "70vh",
+            overflow: "auto",
+          }}
+          size={{ xs: 12, md: 12 }}
+        >
+          <WorkerForm setMode={setMode} />
+        </Grid2>
+      )}
     </Grid2>
   );
 };

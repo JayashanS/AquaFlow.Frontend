@@ -2,15 +2,19 @@ import React, { useState, useRef } from "react";
 import Cropper from "react-cropper";
 import type { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
+import { Button, Box, IconButton } from "@mui/material";
+import { PhotoCamera } from "@mui/icons-material";
+import { ImageCropperProps } from "../interfaces/global";
 
 interface CropperRef {
   cropper: ReactCropperElement["cropper"];
 }
 
-const ImageCropper: React.FC = () => {
+const ImageCropper: React.FC<ImageCropperProps> = ({ onPictureChange }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const cropperRef = useRef<CropperRef | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -32,6 +36,10 @@ const ImageCropper: React.FC = () => {
       if (croppedCanvas) {
         croppedCanvas.toBlob((blob: Blob | null) => {
           if (blob) {
+            const file = new File([blob], "cropped-image.png", {
+              type: "image/png",
+            });
+            onPictureChange(file);
             const croppedImageUrl = URL.createObjectURL(blob);
             setCroppedImage(croppedImageUrl);
           }
@@ -40,43 +48,86 @@ const ImageCropper: React.FC = () => {
     }
   };
 
+  const handleFileInputClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
-    <div className="p-4 space-y-4">
+    <Box
+      sx={{
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <IconButton
+        onClick={handleFileInputClick}
+        sx={{
+          width: 56,
+          height: 56,
+          borderRadius: "50%",
+          backgroundColor: "#1976d2",
+          color: "white",
+          "&:hover": {
+            backgroundColor: "#1565c0",
+          },
+        }}
+      >
+        <PhotoCamera />
+      </IconButton>
       <input
         type="file"
-        accept="image/*"
         onChange={onFileChange}
-        className="mb-4"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        accept="image/*"
       />
 
-      {imageSrc && (
-        <div className="space-y-4">
+      {imageSrc && !croppedImage && (
+        <Box sx={{ mb: 2, width: "100%", maxWidth: "500px" }}>
           <Cropper
             ref={cropperRef as React.RefObject<ReactCropperElement>}
             src={imageSrc}
             style={{ height: 400, width: "100%" }}
-            aspectRatio={1}
+            aspectRatio={16 / 9}
             guides={true}
             viewMode={1}
             background={false}
           />
-
-          <button
+          <Button
             onClick={cropImage}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
           >
             Crop Image
-          </button>
-        </div>
+          </Button>
+        </Box>
       )}
 
       {croppedImage && (
-        <div className="mt-4">
-          <h3 className="text-lg font-medium mb-2">Cropped Result:</h3>
-          <img src={croppedImage} alt="Cropped" className="max-w-full h-auto" />
-        </div>
+        <Box
+          sx={{ mt: 2, width: "100%", maxWidth: "500px", textAlign: "center" }}
+        >
+          <img
+            src={croppedImage}
+            alt="Cropped"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ mt: 2 }}
+            onClick={() => setCroppedImage(null)}
+          >
+            Clear Cropped Image
+          </Button>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

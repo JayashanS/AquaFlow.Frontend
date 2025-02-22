@@ -39,6 +39,15 @@ const OptionsPane: React.FC<OptionsPaneProps> = ({
       }}
     >
       <Grid2 sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        {mode === "create" && (
+          <Button
+            variant="outlined"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => setMode("view")}
+          >
+            Back
+          </Button>
+        )}
         {mode === "view" && (
           <>
             <Paper
@@ -112,15 +121,6 @@ const OptionsPane: React.FC<OptionsPaneProps> = ({
             onClick={() => setMode("create")}
           >
             New Fish Farm
-          </Button>
-        )}
-        {mode === "create" && (
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => setMode("view")}
-          >
-            Back
           </Button>
         )}
       </Grid2>

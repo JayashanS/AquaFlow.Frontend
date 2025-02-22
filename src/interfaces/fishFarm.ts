@@ -70,3 +70,13 @@ export interface LeftPaneProps2 {
     error: Error | null;
   };
 }
+
+export interface CreateFishFarm {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  numberOfCages: number;
+  hasBarge: boolean;
+  picture: File | null;
+}

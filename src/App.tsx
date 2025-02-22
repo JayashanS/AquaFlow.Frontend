@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@emotion/react";
 import theme from "./theme";
-import Dashboard from "./layout/Dashboard";
+import Dashboard from "./layout/Dashboard2";
 
 function App() {
   return (

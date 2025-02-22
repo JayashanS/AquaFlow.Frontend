@@ -1,14 +1,12 @@
 import { ThemeProvider } from "@emotion/react";
 import theme from "./theme";
-import Dashboard from "./layout/Dashboard2";
+import Dashboard from "./layout/Dashboard";
 
 function App() {
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <Dashboard />
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={theme}>
+      <Dashboard />
+    </ThemeProvider>
   );
 }
 

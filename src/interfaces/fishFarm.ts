@@ -1,3 +1,23 @@
+export interface FishFarm {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  numberOfCages: number;
+  hasBarge: boolean;
+  pictureUrl: string;
+}
+
+export interface CreateFishFarm {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  numberOfCages: number;
+  hasBarge: boolean;
+  picture: File | null;
+}
+
 export interface FishFarmFilters {
   name?: string;
   topRightLat?: number;
@@ -21,22 +41,6 @@ export const getDefaultFilters = (): FishFarmFilters => ({
   pageNumber: 1,
   pageSize: 10,
 });
-
-export interface LeftPaneProps {
-  selectedFarmId: number;
-  setSelectedFarmId: (id: number) => void;
-  seteSelectedFarmData: (data: FishFarm) => void;
-}
-
-export interface FishFarm {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  numberOfCages: number;
-  hasBarge: boolean;
-  pictureUrl: string;
-}
 
 export const getDefaultFishFarm = (): FishFarm => ({
   id: 0,
@@ -71,12 +75,24 @@ export interface LeftPaneProps2 {
   };
 }
 
-export interface CreateFishFarm {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  numberOfCages: number;
-  hasBarge: boolean;
-  picture: File | null;
+export type Mode = "view" | "create" | "update";
+
+export interface OptionsPaneProps {
+  mode: Mode;
+  setMode: (mode: Mode) => void;
+  handleFilterChange: (props: HandleFilterChangeProps) => void;
+}
+
+export interface ImageCropperProps {
+  onPictureChange: (croppedImage: File | null) => void;
+}
+
+export interface FishFarmFormProps {
+  setMode: (mode: Mode) => void;
+}
+
+export interface LeftPaneProps {
+  selectedFarmId: number;
+  setSelectedFarmId: (id: number) => void;
+  seteSelectedFarmData: (data: FishFarm) => void;
 }

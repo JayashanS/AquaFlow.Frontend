@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useFishFarms } from "../hooks/useFishFarms";
 import Grid2 from "@mui/material/Grid2";
-import LeftPane from "../layout/LeftPane2";
-import RightPane from "../layout/RightPane";
-import WorkerForm from "../components/FishFarmForm";
+import LeftPane from "../components/LeftPane";
+import RightPane from "../components/RightPane";
+import FishFarmForm from "../components/FishFarmForm";
 import OptionsPane from "../components/OptionsPane";
 import {
   FishFarm,
@@ -12,7 +12,7 @@ import {
   getDefaultFilters,
   HandleFilterChangeProps,
 } from "../interfaces/fishFarm";
-import { Mode } from "../interfaces/global";
+import { Mode } from "../interfaces/fishFarm";
 
 const Dashboard: React.FC = () => {
   const [mode, setMode] = useState<Mode>("view");
@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
     useState<FishFarm>(getDefaultFishFarm());
   const [filters, setFilters] = useState<FishFarmFilters>(getDefaultFilters());
 
-  const { data, isLoading, error, refetch } = useFishFarms(filters);
+  const { data } = useFishFarms(filters);
 
   const handleFilterChange = ({ name, value }: HandleFilterChangeProps) => {
     setFilters((prev) => ({
@@ -102,7 +102,7 @@ const Dashboard: React.FC = () => {
           }}
           size={{ xs: 12, md: 12 }}
         >
-          <WorkerForm setMode={setMode} />
+          <FishFarmForm setMode={setMode} />
         </Grid2>
       )}
     </Grid2>

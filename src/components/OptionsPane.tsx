@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import { OptionsPaneProps } from "../interfaces/global";
+import { OptionsPaneProps } from "../interfaces/fishFarm";
 import {
   Grid2,
   Paper,
@@ -10,6 +10,7 @@ import {
   Typography,
   Checkbox,
   FormControlLabel,
+  Box,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -27,6 +28,7 @@ const OptionsPane: React.FC<OptionsPaneProps> = ({
     setCages(value);
     handleFilterChange({ name: "numberOfCages", value });
   };
+
   return (
     <Grid2
       sx={{
@@ -77,38 +79,46 @@ const OptionsPane: React.FC<OptionsPaneProps> = ({
               </IconButton>
             </Paper>
 
-            <Grid2
-              sx={{ display: "flex", alignItems: "center", width: "200px" }}
-            >
-              <Typography sx={{ fontSize: "0.8rem", minWidth: "100px" }}>
-                Number of Cages:
-              </Typography>
-              <Slider
-                size="small"
-                value={cages}
-                min={0}
-                max={100}
-                step={1}
-                valueLabelDisplay="auto"
-                onChange={handleCageChange}
-                sx={{ width: "100px" }}
-              />
-            </Grid2>
-
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="hasBarge"
-                  onChange={(e) =>
-                    handleFilterChange({
-                      name: "hasBarge",
-                      value: e.target.checked,
-                    })
-                  }
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography sx={{ fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+                  Number of Cages:
+                </Typography>
+                <Slider
+                  size="small"
+                  value={cages}
+                  min={0}
+                  max={100}
+                  step={1}
+                  valueLabelDisplay="auto"
+                  onChange={handleCageChange}
+                  sx={{ width: "100px", mx: 2 }}
                 />
-              }
-              label="Has Barge"
-            />
+              </Box>
+
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography sx={{ fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+                  Has Barge:
+                </Typography>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      name="hasBarge"
+                      defaultChecked
+                      onChange={(e) =>
+                        handleFilterChange({
+                          name: "hasBarge",
+                          value: e.target.checked,
+                        })
+                      }
+                    />
+                  }
+                  label=""
+                  sx={{ m: 0, ml: 1 }}
+                />
+              </Box>
+            </Box>
           </>
         )}
       </Grid2>

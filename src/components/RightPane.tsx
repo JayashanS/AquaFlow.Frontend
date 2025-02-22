@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RightPaneProps } from "../interfaces/fishFarm";
-import { Typography, Grid2, Card, CardContent } from "@mui/material";
+import { Typography, Grid2, Box } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import DirectionsBoatIcon from "@mui/icons-material/DirectionsBoat";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Map, View } from "ol";
@@ -14,6 +13,7 @@ import { Vector as VectorLayer } from "ol/layer";
 import { Vector as VectorSource } from "ol/source";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
+import WorkersPage from "../pages/WorkersPage";
 
 const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -24,17 +24,14 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
 
     try {
       if (!farm) {
-        setMapError("Farm data is not available");
         return;
       }
 
       if (!mapContainerRef.current) {
-        setMapError("Map container not found");
         return;
       }
 
       if (!farm.latitude || !farm.longitude) {
-        setMapError("Invalid coordinates");
         return;
       }
 
@@ -91,7 +88,9 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
         size={{ xs: 12, md: 12 }}
         sx={{ borderBottom: "solid 1px #dedede" }}
       >
-        <Typography variant="h6">{farm.name}</Typography>
+        <Typography sx={{ fontSize: "1.5rem", marginLeft: "10px" }}>
+          {farm.name}
+        </Typography>
       </Grid2>
       <Grid2 container size={{ xs: 12, md: 12 }}>
         <Grid2
@@ -107,61 +106,80 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
               style={{ width: "100%", height: "auto" }}
             />
           </Grid2>
-          <Grid2 size={{ xs: 12, md: 8 }}>
-            <Typography variant="body1">
-              <strong>Number of Cages:</strong> {farm.numberOfCages}
-            </Typography>
-            <Card
-              sx={{
-                width: 150,
-                padding: 2,
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                boxShadow: 2,
-              }}
-            >
-              {farm.hasBarge ? (
-                <CheckCircleIcon sx={{ color: "green", fontSize: 30 }} />
-              ) : (
-                <>
-                  <CancelIcon sx={{ color: "red", fontSize: 30 }} />
-                  <DirectionsBoatIcon sx={{ color: "grey", fontSize: 30 }} />
-                </>
-              )}
-              <CardContent sx={{ padding: "0 !important" }}>
-                <Typography variant="body2">
-                  {farm.hasBarge ? "Has Barge" : "No Barge"}
-                </Typography>
-              </CardContent>
-            </Card>
-            <Card
-              sx={{
-                width: 150,
-                padding: 2,
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                boxShadow: 2,
-              }}
-            >
-              <GridOnIcon sx={{ color: "blue", fontSize: 30 }} />
-              <CardContent sx={{ padding: "0 !important" }}>
-                <Typography variant="body2">Cages</Typography>
-                <Typography variant="h6" fontWeight="bold">
-                  {farm.numberOfCages}
-                </Typography>
-              </CardContent>
-            </Card>
-            <Typography variant="body1">
-              <strong>Has Barge:</strong> {farm.hasBarge ? "Yes" : "No"}
-            </Typography>
-            {mapError && (
-              <Typography color="error">Map Error: {mapError}</Typography>
-            )}
+          <Grid2
+            container
+            spacing={2}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: "10px",
+            }}
+          >
+            <Grid2 size={{ xs: 12, md: 6 }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  padding: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                }}
+              >
+                {farm.hasBarge ? (
+                  <CheckCircleIcon sx={{ color: "#03fc90", fontSize: 30 }} />
+                ) : (
+                  <>
+                    <CancelIcon sx={{ color: "red", fontSize: 30 }} />
+                  </>
+                )}
+                <Box sx={{ padding: 0, marginLeft: "8px" }}>
+                  <Typography variant="body2">
+                    {farm.hasBarge ? "Has Barge" : "No Barge"}
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid2>
+
+            <Grid2 size={{ xs: 12, md: 6 }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  padding: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                }}
+              >
+                <GridOnIcon sx={{ color: "#b963ff", fontSize: 30 }} />
+                <Box sx={{ padding: 0, marginLeft: "8px" }}>
+                  <Typography variant="body2">
+                    {farm.numberOfCages} Cages
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid2>
           </Grid2>
 
           <Grid2 size={{ xs: 12, md: 12 }}>
+            <Typography
+              variant="body1"
+              color="#ff2676"
+              sx={{
+                position: "absolute",
+                top: 10,
+                left: 10,
+                zIndex: 10,
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              GPS ({farm.longitude},{farm.latitude})
+            </Typography>
             <div
               ref={mapContainerRef}
               style={{
@@ -174,7 +192,9 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 container size={{ xs: 12, md: 4 }}></Grid2>
+        <Grid2 container size={{ xs: 12, md: 4 }}>
+          <WorkersPage />
+        </Grid2>
       </Grid2>
     </Grid2>
   );

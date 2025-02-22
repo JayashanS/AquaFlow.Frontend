@@ -31,7 +31,7 @@ export const createFishFarm = async (formData: FormData) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error creating fish farm:", error);
+    console.log(error);
     throw new Error("Failed to create fish farm");
   }
 };

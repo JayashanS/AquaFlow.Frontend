@@ -50,7 +50,7 @@ export const createWorker = async (formData: FormData): Promise<void> => {
       },
     });
   } catch (error) {
-    console.error("Error creating worker:", error);
+    console.error(error);
     throw new Error("Failed to create worker.");
   }
 };

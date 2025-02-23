@@ -16,7 +16,7 @@ import {
   Button,
   TablePagination,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import { HandleWorkerFilterChangeProps } from "../interfaces/worker";
 
 export interface Worker {
@@ -36,7 +36,7 @@ interface WorkerTableProps {
   page: number;
   rowsPerPage: number;
   onFilterChange: (params: HandleWorkerFilterChangeProps) => void;
-  onEdit: (worker: Worker) => void;
+
   onDelete: (id: number) => void;
 }
 
@@ -46,7 +46,7 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
   page,
   rowsPerPage,
   onFilterChange,
-  onEdit,
+
   onDelete,
 }) => {
   const [open, setOpen] = useState(false);
@@ -110,9 +110,6 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
               <TableCell>{worker.email}</TableCell>
               <TableCell>{worker.certifiedUntil}</TableCell>
               <TableCell>
-                <IconButton color="primary" onClick={() => onEdit(worker)}>
-                  <Edit />
-                </IconButton>
                 <IconButton
                   color="secondary"
                   onClick={() => handleDeleteClick(worker.id)}

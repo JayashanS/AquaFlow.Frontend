@@ -17,8 +17,9 @@ import { Mode } from "../interfaces/fishFarm";
 const Dashboard: React.FC = () => {
   const [mode, setMode] = useState<Mode>("view");
   const [selectedFarmId, setSelectedFarmId] = useState<number>(1);
-  const [selectedFarmData, setSelectedFarmData] =
-    useState<FishFarm>(getDefaultFishFarm());
+  const [selectedFarmData, setSelectedFarmData] = useState<
+    FishFarm | undefined
+  >(getDefaultFishFarm());
   const [filters, setFilters] = useState<FishFarmFilters>(getDefaultFilters());
 
   const { data } = useFishFarms(filters);

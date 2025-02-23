@@ -50,7 +50,7 @@ const customTheme = createTheme({
   colorSchemes: { light: true, dark: true },
   palette: {
     primary: {
-      main: "#26b0ff",
+      main: "#2975e6",
     },
     secondary: {
       main: "#dc004e",

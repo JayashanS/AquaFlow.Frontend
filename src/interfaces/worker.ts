@@ -35,6 +35,8 @@ export interface Worker {
   certifiedUntil: string;
   fishFarmId: number;
   pictureUrl: string;
+  positionName: string;
+  fishFarmName: string;
 }
 export interface WorkerFilterResponse {
   workers: Worker[];

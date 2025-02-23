@@ -17,7 +17,7 @@ const WorkersPage: React.FC = () => {
     getDefaultWorkerFilters()
   );
 
-  const { data, isLoading, error } = useGetWorkersByFilter(filters);
+  const { data } = useGetWorkersByFilter(filters);
   const deleteWorkerMutation = useDeleteWorker();
 
   const handleFilterChange = ({

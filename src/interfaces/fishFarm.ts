@@ -61,10 +61,10 @@ export interface HandleFishFarmFilterChangeProps {
   value: string | number | boolean;
 }
 
-export interface LeftPaneProps2 {
+export interface LeftPaneProps {
   selectedFarmId: number;
   setSelectedFarmId: (id: number) => void;
-  seteSelectedFarmData: (farm: FishFarm) => void;
+  seteSelectedFarmData: (farm: FishFarm | undefined) => void;
   filters: FishFarmFilters;
   handleFilterChange: ({
     name,
@@ -92,12 +92,6 @@ export interface ImageCropperProps {
 
 export interface FishFarmFormProps {
   setMode: (mode: Mode) => void;
-}
-
-export interface LeftPaneProps {
-  selectedFarmId: number;
-  setSelectedFarmId: (id: number) => void;
-  seteSelectedFarmData: (data: FishFarm) => void;
 }
 
 export interface FishFarmFormData {

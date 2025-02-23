@@ -1,9 +1,19 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextField, Button, Grid2, Autocomplete } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Grid2,
+  Autocomplete,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import ImageCropper from "./ImageCropper";
 import { useCreateWorker } from "../hooks/useWorker";
 import { useFishFarms } from "../hooks/useFishFarms";
+import { useWorkerPositions } from "../hooks/useWorkerPositions";
 import { CreateWorkerDTO, WorkerFormProps } from "../interfaces/worker";
 import {
   FishFarmFilters,
@@ -18,6 +28,7 @@ const WorkerForm: React.FC<WorkerFormProps> = ({ setMode }) => {
 
   const createWorkerMutation = useCreateWorker();
   const { data } = useFishFarms(filters);
+  const { data: workerPositions } = useWorkerPositions();
 
   const onSubmit = async (data: CreateWorkerDTO) => {
     if (!selectedPicture) {
@@ -145,20 +156,35 @@ const WorkerForm: React.FC<WorkerFormProps> = ({ setMode }) => {
           <Controller
             name="positionId"
             control={control}
-            rules={{ required: "Position ID is required" }}
+            rules={{ required: "Position is required" }}
             render={({ field, fieldState }) => (
-              <TextField
-                {...field}
-                type="number"
-                label="Position ID"
-                fullWidth
-                size="small"
-                error={!!fieldState.error}
-                helperText={fieldState.error?.message}
-              />
+              <FormControl fullWidth size="small" error={!!fieldState.error}>
+                <InputLabel>Position</InputLabel>
+                <Select
+                  {...field}
+                  label="Position"
+                  value={String(field.value)}
+                  onChange={(e) =>
+                    setValue("positionId", Number(e.target.value))
+                  }
+                  defaultValue=""
+                >
+                  {workerPositions?.map((position) => (
+                    <MenuItem key={position.id} value={position.id}>
+                      {position.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {fieldState.error && (
+                  <div style={{ color: "red" }}>
+                    {fieldState.error?.message}
+                  </div>
+                )}
+              </FormControl>
             )}
           />
         </Grid2>
+
         <Grid2 size={{ xs: 12, md: 12 }}>
           {" "}
           <Controller

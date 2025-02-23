@@ -22,7 +22,7 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
 
   useEffect(() => {
     let map: Map | null = null;
-
+    console.log(mapError);
     try {
       if (!farm) {
         return;
@@ -205,7 +205,7 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
           </Grid2>
         </Grid2>
         <Grid2 container size={{ xs: 12, md: 4 }}>
-          <WorkersList />
+          <WorkersList selectedFarmId={farm.id} />
         </Grid2>
       </Grid2>
     </Grid2>

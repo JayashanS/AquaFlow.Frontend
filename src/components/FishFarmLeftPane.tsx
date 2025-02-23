@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FishFarm, LeftPaneProps2 } from "../interfaces/fishFarm";
+import { FishFarm, LeftPaneProps } from "../interfaces/fishFarm";
 import {
   Box,
   List,
@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import DirectionsBoatFilledIcon from "@mui/icons-material/DirectionsBoatFilled";
 
-const LeftPane: React.FC<LeftPaneProps2> = ({
+const LeftPane: React.FC<LeftPaneProps> = ({
   selectedFarmId,
   setSelectedFarmId,
   seteSelectedFarmData,
@@ -71,7 +71,7 @@ const LeftPane: React.FC<LeftPaneProps2> = ({
                   key={farm.id}
                   sx={{
                     backgroundColor:
-                      farm.id === selectedFarmId ? "#f6e6ff" : "transparent",
+                      farm.id === selectedFarmId ? "#c2e9ff" : "transparent",
                     cursor: "pointer",
                   }}
                   disablePadding

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -10,12 +10,24 @@ import Pagination from "@mui/material/Pagination";
 import { useGetWorkersByFilter } from "../hooks/useWorker";
 import { WorkerFilters } from "../interfaces/worker";
 
-const WorkerList = () => {
+interface WorkersListProps {
+  selectedFarmId: number;
+}
+
+const WorkerList: React.FC<WorkersListProps> = ({ selectedFarmId }) => {
   const [filters, setFilters] = useState<WorkerFilters>({
     pageNumber: 1,
     pageSize: 10,
     name: "",
+    fishFarmId: undefined,
   });
+
+  useEffect(() => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      fishFarmId: selectedFarmId,
+    }));
+  }, [selectedFarmId]);
 
   const { data, isLoading, error } = useGetWorkersByFilter(filters);
 
@@ -51,7 +63,7 @@ const WorkerList = () => {
                         variant="body2"
                         sx={{ color: "text.primary", display: "inline" }}
                       >
-                        Position: {worker.positionId}{" "}
+                        {worker.positionName}
                       </Typography>
                       {" — Certified Until: " +
                         new Date(worker.certifiedUntil).toLocaleDateString()}

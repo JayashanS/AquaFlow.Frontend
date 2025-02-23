@@ -31,10 +31,6 @@ const WorkerForm: React.FC<WorkerFormProps> = ({ setMode }) => {
   const { data: workerPositions } = useWorkerPositions();
 
   const onSubmit = async (data: CreateWorkerDTO) => {
-    if (!selectedPicture) {
-      alert("Please upload an image for the worker.");
-      return;
-    }
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("age", data.age.toString());

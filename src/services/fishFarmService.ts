@@ -11,10 +11,16 @@ export const fetchFishFarms = async (filters: FishFarmFilters) => {
       params.append(key, String(value));
     }
   });
-  const response = await axios.get(
-    `${API_BASE_URL}/FishFarm/getByFilter?${params.toString()}`
-  );
-  return response.data;
+
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/FishFarm/getByFilter?${params.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("An error occurred while fetching fish farms.");
+  }
 };
 
 export const createFishFarm = async (formData: FormData) => {

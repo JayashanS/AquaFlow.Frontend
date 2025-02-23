@@ -10,6 +10,7 @@ import {
   getDefaultWorkerFilters,
 } from "../interfaces/worker";
 import { Mode } from "../interfaces/fishFarm";
+import NoDataPage from "../components/NoData";
 
 const WorkersPage: React.FC = () => {
   const [mode, setMode] = useState<Mode>("view");
@@ -17,7 +18,7 @@ const WorkersPage: React.FC = () => {
     getDefaultWorkerFilters()
   );
 
-  const { data } = useGetWorkersByFilter(filters);
+  const { data, isLoading, isError } = useGetWorkersByFilter(filters);
   const deleteWorkerMutation = useDeleteWorker();
 
   const handleFilterChange = ({
@@ -74,15 +75,21 @@ const WorkersPage: React.FC = () => {
             display: { xs: "none", md: "block" },
           }}
         >
-          {data?.workers && (
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : isError ? (
+            <NoDataPage />
+          ) : data?.workers && data.workers.length > 0 ? (
             <WorkerTable
-              workers={data?.workers}
+              workers={data.workers}
               onFilterChange={handleFilterChange}
               totalCount={data.totalCount}
               page={filters.pageNumber || 1}
               rowsPerPage={filters.pageSize || 10}
               onDelete={handleDeleteWorker}
             />
+          ) : (
+            <NoDataPage />
           )}
         </Grid2>
       )}

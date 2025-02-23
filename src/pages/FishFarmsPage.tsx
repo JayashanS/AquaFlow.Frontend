@@ -13,6 +13,7 @@ import {
   HandleFishFarmFilterChangeProps,
 } from "../interfaces/fishFarm";
 import { Mode } from "../interfaces/fishFarm";
+import NoDataPage from "../components/NoData";
 
 const Dashboard: React.FC = () => {
   const [mode, setMode] = useState<Mode>("view");
@@ -22,7 +23,7 @@ const Dashboard: React.FC = () => {
   >(getDefaultFishFarm());
   const [filters, setFilters] = useState<FishFarmFilters>(getDefaultFilters());
 
-  const { data } = useFishFarms(filters);
+  const { data, isError, isLoading } = useFishFarms(filters);
 
   const handleFilterChange = ({
     name,
@@ -68,34 +69,77 @@ const Dashboard: React.FC = () => {
       </Grid2>
       {mode === "view" && (
         <>
-          <Grid2
-            size={{ md: 3 }}
-            sx={{
-              backgroundColor: "#f7f6f9",
-              display: { xs: "none", md: "block" },
-            }}
-          >
-            <LeftPane
-              selectedFarmId={selectedFarmId}
-              setSelectedFarmId={setSelectedFarmId}
-              seteSelectedFarmData={setSelectedFarmData}
-              filters={filters}
-              handleFilterChange={handleFilterChange}
-              data={data}
-            />
-          </Grid2>
-          <Grid2
-            size={{ md: 9 }}
-            sx={{
-              backgroundColor: "#ffffff",
-              overflow: "auto",
-              maxHeight: "95vh",
-              padding: { xs: "0 0 20px 20px", md: "40px" },
-              flexGrow: 1,
-            }}
-          >
-            {selectedFarmData && <RightPane farm={selectedFarmData} />}
-          </Grid2>
+          {isLoading ? (
+            <Grid2
+              size={{ md: 12 }}
+              sx={{
+                backgroundColor: "#f7f6f9",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              Loading...
+            </Grid2>
+          ) : isError ? (
+            <Grid2
+              size={{ md: 12 }}
+              sx={{
+                backgroundColor: "#f7f6f9",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <NoDataPage />
+            </Grid2>
+          ) : data?.fishFarms && data.fishFarms.length > 0 ? (
+            <>
+              <Grid2
+                size={{ md: 3 }}
+                sx={{
+                  backgroundColor: "#f7f6f9",
+                  display: { xs: "none", md: "block" },
+                }}
+              >
+                <LeftPane
+                  selectedFarmId={selectedFarmId}
+                  setSelectedFarmId={setSelectedFarmId}
+                  seteSelectedFarmData={setSelectedFarmData}
+                  filters={filters}
+                  handleFilterChange={handleFilterChange}
+                  data={data}
+                />
+              </Grid2>
+              <Grid2
+                size={{ md: 9 }}
+                sx={{
+                  backgroundColor: "#ffffff",
+                  overflow: "auto",
+                  maxHeight: "95vh",
+                  padding: { xs: "0 0 20px 20px", md: "40px" },
+                  flexGrow: 1,
+                }}
+              >
+                {selectedFarmData && <RightPane farm={selectedFarmData} />}
+              </Grid2>
+            </>
+          ) : (
+            <Grid2
+              size={{ md: 12 }}
+              sx={{
+                backgroundColor: "#f7f6f9",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <NoDataPage />
+            </Grid2>
+          )}
         </>
       )}
       {mode === "create" && (

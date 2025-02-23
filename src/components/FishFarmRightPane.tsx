@@ -6,14 +6,15 @@ import GridOnIcon from "@mui/icons-material/GridOn";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
+import XYZ from "ol/source/XYZ";
 import { Point } from "ol/geom";
 import { Feature } from "ol";
 import { Vector as VectorLayer } from "ol/layer";
 import { Vector as VectorSource } from "ol/source";
+import { Style, Circle, Fill } from "ol/style";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
-import WorkersPage from "../pages/WorkersPage";
+import WorkersList from "./WorkerList";
 
 const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -35,19 +36,21 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
         return;
       }
 
-      const coordinates = fromLonLat([farm.longitude, farm.latitude]);
+      const coordinates = fromLonLat([farm.latitude, farm.longitude]);
 
       map = new Map({
         target: mapContainerRef.current,
         layers: [
           new TileLayer({
-            source: new OSM(),
+            source: new XYZ({
+              url: `https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}`,
+            }),
           }),
         ],
         controls: [],
         view: new View({
           center: coordinates,
-          zoom: 14,
+          zoom: 8,
           projection: "EPSG:3857",
         }),
       });
@@ -56,6 +59,16 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
         geometry: new Point(coordinates),
       });
 
+      marker.setStyle(
+        new Style({
+          image: new Circle({
+            radius: 8,
+            fill: new Fill({
+              color: "red",
+            }),
+          }),
+        })
+      );
       const vectorLayer = new VectorLayer({
         source: new VectorSource({
           features: [marker],
@@ -168,7 +181,6 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
               variant="body1"
               color="#ff2676"
               sx={{
-                position: "absolute",
                 top: 10,
                 left: 10,
                 zIndex: 10,
@@ -193,7 +205,7 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
           </Grid2>
         </Grid2>
         <Grid2 container size={{ xs: 12, md: 4 }}>
-          <WorkersPage />
+          <WorkersList />
         </Grid2>
       </Grid2>
     </Grid2>

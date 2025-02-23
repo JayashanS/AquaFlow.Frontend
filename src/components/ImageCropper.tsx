@@ -4,7 +4,7 @@ import type { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { Button, Box, IconButton } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
-import { ImageCropperProps } from "../interfaces/global";
+import { ImageCropperProps } from "../interfaces/fishFarm";
 
 interface CropperRef {
   cropper: ReactCropperElement["cropper"];
@@ -66,8 +66,8 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ onPictureChange }) => {
       <IconButton
         onClick={handleFileInputClick}
         sx={{
-          width: 56,
-          height: 56,
+          width: 70,
+          height: 70,
           borderRadius: "50%",
           backgroundColor: "#1976d2",
           color: "white",
@@ -76,7 +76,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ onPictureChange }) => {
           },
         }}
       >
-        <PhotoCamera />
+        <PhotoCamera fontSize="large" />
       </IconButton>
       <input
         type="file"
@@ -101,7 +101,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ onPictureChange }) => {
             onClick={cropImage}
             variant="contained"
             color="primary"
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, width: "100%" }}
           >
             Crop Image
           </Button>
@@ -110,12 +110,19 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ onPictureChange }) => {
 
       {croppedImage && (
         <Box
-          sx={{ mt: 2, width: "100%", maxWidth: "500px", textAlign: "center" }}
+          sx={{
+            mt: 2,
+            width: "100%",
+            maxWidth: "500px",
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
           <img
             src={croppedImage}
             alt="Cropped"
-            style={{ maxWidth: "100%", height: "auto" }}
+            style={{ width: "100%", height: "auto" }}
           />
           <Button
             variant="contained"

@@ -19,7 +19,6 @@ const LeftPane: React.FC<LeftPaneProps2> = ({
   handleFilterChange,
   data,
 }) => {
-  // Handle pagination change
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     value: number
@@ -29,7 +28,6 @@ const LeftPane: React.FC<LeftPaneProps2> = ({
 
   useEffect(() => {
     if (data?.fishFarms?.length) {
-      // Set selected farm data based on the filters (if available)
       seteSelectedFarmData(
         data.fishFarms.find((farm: FishFarm) => farm.id === selectedFarmId)
       );

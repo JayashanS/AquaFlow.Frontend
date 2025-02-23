@@ -2,9 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
+import XYZ from "ol/source/XYZ";
 import { fromLonLat, transform } from "ol/proj";
 import { Modal, Box, Button } from "@mui/material";
+import { Feature } from "ol";
+import { Point } from "ol/geom";
+import { Vector as VectorLayer } from "ol/layer";
+import { Vector as VectorSource } from "ol/source";
+import { Style, Circle, Fill } from "ol/style";
 import "ol/ol.css";
 
 interface OpenLayersMapProps {
@@ -23,6 +28,7 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
   const [selectedCoordinates, setSelectedCoordinates] = useState<
     [number, number] | null
   >(null);
+  const vectorLayerRef = useRef<VectorLayer | null>(null);
 
   const initializeMap = () => {
     if (!mapRef.current) return;
@@ -35,7 +41,9 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
     const initialMap = new Map({
       layers: [
         new TileLayer({
-          source: new OSM(),
+          source: new XYZ({
+            url: `https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}`,
+          }),
         }),
       ],
       view: new View({
@@ -44,8 +52,17 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
       }),
     });
 
-    initialMap.setTarget(mapRef.current);
+    const vectorSource = new VectorSource();
+
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+    });
+
+    initialMap.addLayer(vectorLayer);
     mapInstanceRef.current = initialMap;
+    vectorLayerRef.current = vectorLayer;
+
+    initialMap.setTarget(mapRef.current);
 
     initialMap.on("click", (event) => {
       const clickedCoord = initialMap.getCoordinateFromPixel(event.pixel);
@@ -55,6 +72,24 @@ const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
         "EPSG:4326"
       );
       setSelectedCoordinates([transformedCoord[0], transformedCoord[1]]);
+
+      const marker = new Feature({
+        geometry: new Point(clickedCoord),
+      });
+
+      marker.setStyle(
+        new Style({
+          image: new Circle({
+            radius: 8,
+            fill: new Fill({
+              color: "red",
+            }),
+          }),
+        })
+      );
+
+      vectorSource.clear();
+      vectorSource.addFeature(marker);
     });
 
     setTimeout(() => {

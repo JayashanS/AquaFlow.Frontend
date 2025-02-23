@@ -10,26 +10,30 @@ import {
 } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import ImageCropper from "./ImageCropper";
-import OpenLayersMap from "./OpenLayersMap";
+import OpenLayersMap from "./FishFarmLocationPicker";
 import { useCreateFishFarm } from "../hooks/useFishFarms";
-import { FishFarmFormProps } from "../interfaces/global";
-
-interface FishFarmFormData {
-  name: string;
-  latitude: number;
-  longitude: number;
-  numberOfCages: number;
-  hasBarge: boolean;
-  picture: File | null;
-}
+import { FishFarmFormProps, FishFarmFormData } from "../interfaces/fishFarm";
 
 const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
-  const { control, handleSubmit, setValue } = useForm<FishFarmFormData>();
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FishFarmFormData>({
+    defaultValues: {
+      picture: null,
+    },
+  });
   const [openMap, setOpenMap] = useState(false);
   const [selectedPicture, setSelectedPicture] = useState<File | null>(null);
   const createFishFarmMutation = useCreateFishFarm();
 
   const onSubmit = async (data: FishFarmFormData) => {
+    if (!selectedPicture) {
+      alert("Please upload a picture.");
+      return;
+    }
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("latitude", data.latitude.toString());
@@ -67,8 +71,8 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
   };
 
   const handleCoordinatesSelect = (coordinates: [number, number]) => {
-    setValue("latitude", coordinates[0]);
-    setValue("longitude", coordinates[1]);
+    setValue("latitude", parseFloat(coordinates[0].toFixed(4)));
+    setValue("longitude", parseFloat(coordinates[1].toFixed(4)));
   };
 
   const handlePictureChange = (croppedImage: File | null) => {
@@ -85,7 +89,6 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
         spacing={2}
         sx={{
           overflowY: "auto",
-
           marginTop: "20px",
           paddingLeft: "20vw",
           paddingRight: "20vw",
@@ -93,18 +96,22 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
       >
         <Grid2 size={{ xs: 12 }}>
           <ImageCropper onPictureChange={handlePictureChange} />
+          {errors.picture && <span>{errors.picture.message}</span>}
         </Grid2>
         <Grid2 size={{ xs: 12, md: 12 }}>
           <Controller
             name="name"
             control={control}
             defaultValue=""
+            rules={{ required: "Fish farm name is required" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 label="Fish Farm Name"
                 fullWidth
                 size="small"
+                error={!!errors.name}
+                helperText={errors.name?.message}
               />
             )}
           />
@@ -114,8 +121,26 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
             name="latitude"
             control={control}
             defaultValue={0}
+            rules={{
+              required: "Latitude is required",
+              min: {
+                value: -90,
+                message: "Latitude must be between -90 and 90",
+              },
+              max: {
+                value: 90,
+                message: "Latitude must be between -90 and 90",
+              },
+            }}
             render={({ field }) => (
-              <TextField {...field} label="Latitude" fullWidth size="small" />
+              <TextField
+                {...field}
+                label="Latitude"
+                fullWidth
+                size="small"
+                error={!!errors.latitude}
+                helperText={errors.latitude?.message}
+              />
             )}
           />
         </Grid2>
@@ -124,8 +149,26 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
             name="longitude"
             control={control}
             defaultValue={0}
+            rules={{
+              required: "Longitude is required",
+              min: {
+                value: -180,
+                message: "Longitude must be between -180 and 180",
+              },
+              max: {
+                value: 180,
+                message: "Longitude must be between -180 and 180",
+              },
+            }}
             render={({ field }) => (
-              <TextField {...field} label="Longitude" fullWidth size="small" />
+              <TextField
+                {...field}
+                label="Longitude"
+                fullWidth
+                size="small"
+                error={!!errors.longitude}
+                helperText={errors.longitude?.message}
+              />
             )}
           />
         </Grid2>
@@ -139,6 +182,7 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
             name="numberOfCages"
             control={control}
             defaultValue={0}
+            rules={{ required: "Number of cages is required" }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -146,6 +190,8 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
                 type="number"
                 fullWidth
                 size="small"
+                error={!!errors.numberOfCages}
+                helperText={errors.numberOfCages?.message}
               />
             )}
           />

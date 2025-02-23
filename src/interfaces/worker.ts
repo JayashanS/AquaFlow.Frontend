@@ -1,4 +1,4 @@
-export interface WorkerFilterOptions {
+export interface WorkerFilters {
   name?: string;
   fishFarmId?: number;
   positionId?: number;
@@ -39,4 +39,32 @@ export interface Worker {
 export interface WorkerFilterResponse {
   workers: Worker[];
   totalCount: number;
+}
+
+export interface HandleWorkerFilterChangeProps {
+  name: keyof WorkerFilters;
+  value: string | number | boolean;
+}
+
+export const getDefaultWorkerFilters = (): WorkerFilters => {
+  return {
+    name: "",
+    fishFarmId: undefined,
+    positionId: undefined,
+    certifiedUntil: undefined,
+    pageNumber: 1,
+    pageSize: 10,
+  };
+};
+
+export type Mode = "view" | "create" | "update";
+
+export interface OptionsPaneProps {
+  mode: Mode;
+  setMode: (mode: Mode) => void;
+  handleFilterChange: (props: HandleWorkerFilterChangeProps) => void;
+}
+
+export interface WorkerFormProps {
+  setMode: (mode: Mode) => void;
 }

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useFishFarms } from "../hooks/useFishFarms";
 import Grid2 from "@mui/material/Grid2";
-import LeftPane from "../components/LeftPane";
-import RightPane from "../components/RightPane";
+import LeftPane from "../components/FishFarmLeftPane";
+import RightPane from "../components/FishFarmRightPane";
 import FishFarmForm from "../components/FishFarmForm";
-import OptionsPane from "../components/OptionsPane";
+import OptionsPane from "../components/FishFarmOptionsPane";
 import {
   FishFarm,
   getDefaultFishFarm,
   FishFarmFilters,
   getDefaultFilters,
-  HandleFilterChangeProps,
+  HandleFishFarmFilterChangeProps,
 } from "../interfaces/fishFarm";
 import { Mode } from "../interfaces/fishFarm";
 
@@ -23,7 +23,10 @@ const Dashboard: React.FC = () => {
 
   const { data } = useFishFarms(filters);
 
-  const handleFilterChange = ({ name, value }: HandleFilterChangeProps) => {
+  const handleFilterChange = ({
+    name,
+    value,
+  }: HandleFishFarmFilterChangeProps) => {
     setFilters((prev) => ({
       ...prev,
       [name]: value,

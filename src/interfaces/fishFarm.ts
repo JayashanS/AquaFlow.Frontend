@@ -56,7 +56,7 @@ export interface RightPaneProps {
   farm: FishFarm;
 }
 
-export interface HandleFilterChangeProps {
+export interface HandleFishFarmFilterChangeProps {
   name: keyof FishFarmFilters;
   value: string | number | boolean;
 }
@@ -66,7 +66,10 @@ export interface LeftPaneProps2 {
   setSelectedFarmId: (id: number) => void;
   seteSelectedFarmData: (farm: FishFarm) => void;
   filters: FishFarmFilters;
-  handleFilterChange: ({ name, value }: HandleFilterChangeProps) => void;
+  handleFilterChange: ({
+    name,
+    value,
+  }: HandleFishFarmFilterChangeProps) => void;
   data: {
     fishFarms: FishFarm[];
     totalCount: number;
@@ -80,7 +83,7 @@ export type Mode = "view" | "create" | "update";
 export interface OptionsPaneProps {
   mode: Mode;
   setMode: (mode: Mode) => void;
-  handleFilterChange: (props: HandleFilterChangeProps) => void;
+  handleFilterChange: (props: HandleFishFarmFilterChangeProps) => void;
 }
 
 export interface ImageCropperProps {
@@ -95,4 +98,13 @@ export interface LeftPaneProps {
   selectedFarmId: number;
   setSelectedFarmId: (id: number) => void;
   seteSelectedFarmData: (data: FishFarm) => void;
+}
+
+export interface FishFarmFormData {
+  name: string;
+  latitude: number;
+  longitude: number;
+  numberOfCages: number;
+  hasBarge: boolean;
+  picture: File | null;
 }

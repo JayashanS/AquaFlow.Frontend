@@ -6,13 +6,12 @@ import {
   createWorker,
 } from "../services/workerService";
 import {
-  WorkerFilterOptions,
-  CreateWorkerDTO,
+  WorkerFilters,
   UpdateWorkerDTO,
   WorkerFilterResponse,
 } from "../interfaces/worker";
 
-export const useGetWorkersByFilter = (filters: WorkerFilterOptions) => {
+export const useGetWorkersByFilter = (filters: WorkerFilters) => {
   return useQuery<WorkerFilterResponse>({
     queryKey: ["workers", filters],
     queryFn: () => getWorkersByFilter(filters),
@@ -44,7 +43,7 @@ export const useUpdateWorker = () => {
 export const useCreateWorker = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (workerData: CreateWorkerDTO) => createWorker(workerData),
+    mutationFn: (formData: FormData) => createWorker(formData),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workers"] }),
   });
 };

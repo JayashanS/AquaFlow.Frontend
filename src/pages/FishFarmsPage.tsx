@@ -32,6 +32,7 @@ const FishFarmsPage: React.FC = () => {
     setFilters((prev) => ({
       ...prev,
       [name]: value,
+      pageNumber: name === "pageNumber" ? (value as number) : 1,
     }));
   };
 

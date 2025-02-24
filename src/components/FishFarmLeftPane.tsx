@@ -43,7 +43,7 @@ const LeftPane: React.FC<LeftPaneProps> = ({
         bgcolor: "transparent",
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        height: "75vh",
         position: "relative",
       }}
     >

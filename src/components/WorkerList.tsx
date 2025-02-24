@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
+import {
+  Box,
+  Avatar,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  List,
+  ListItem,
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import { useGetWorkersByFilter } from "../hooks/useWorker";
@@ -75,7 +78,25 @@ const WorkerList: React.FC<WorkersListProps> = ({ selectedFarmId }) => {
             </React.Fragment>
           ))
         ) : (
-          <p>No workers found</p>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "50vh",
+              width: "20vw",
+              opacity: 0.6,
+            }}
+          >
+            <Typography
+              component="span"
+              variant="body2"
+              sx={{ color: "gray", fontSize: 18 }}
+            >
+              No workers found.
+            </Typography>
+          </Box>
         )}
       </List>
 
@@ -83,6 +104,8 @@ const WorkerList: React.FC<WorkersListProps> = ({ selectedFarmId }) => {
         <Pagination
           count={Math.ceil(data.totalCount / (filters.pageSize || 1))}
           page={filters.pageNumber}
+          color="primary"
+          shape="rounded"
           onChange={handlePageChange}
           sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
         />

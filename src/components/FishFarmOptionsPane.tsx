@@ -16,7 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchIcon from "@mui/icons-material/Search";
 
-const OptionsPane: React.FC<OptionsPaneProps> = ({
+const FishFarmOptionsPane: React.FC<OptionsPaneProps> = ({
   mode,
   setMode,
   handleFilterChange,
@@ -79,7 +79,9 @@ const OptionsPane: React.FC<OptionsPaneProps> = ({
               </IconButton>
             </Paper>
 
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 2, mt: "20px" }}
+            >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography sx={{ fontSize: "0.8rem", whiteSpace: "nowrap" }}>
                   Number of Cages:
@@ -138,4 +140,4 @@ const OptionsPane: React.FC<OptionsPaneProps> = ({
   );
 };
 
-export default OptionsPane;
+export default FishFarmOptionsPane;

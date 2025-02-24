@@ -1,9 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RightPaneProps } from "../interfaces/fishFarm";
-import { Typography, Grid2, Box } from "@mui/material";
+import {
+  Typography,
+  Grid2,
+  Box,
+  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+} from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import GridOnIcon from "@mui/icons-material/GridOn";
 import CancelIcon from "@mui/icons-material/Cancel";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
@@ -15,10 +28,43 @@ import { Style, Circle, Fill } from "ol/style";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
 import WorkersList from "./WorkerList";
+import { useDeleteFishFarm } from "../hooks/useFishFarms";
+import FishFarmEditForm from "./FishFarmEditForm";
 
-const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
+const FishFarmRightPane: React.FC<RightPaneProps> = ({ farm }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [mapError, setMapError] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState(0);
+  const [openEditor, setOpenEditor] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const deleteFishFarmMutation = useDeleteFishFarm();
+
+  const handleDeleteFishFarm = (id: number) => {
+    deleteFishFarmMutation.mutate(id, {
+      onSuccess: () => {
+        console.log("Fish farm deleted successfully");
+      },
+      onError: (error) => {
+        console.error("Error deleting fish farm:", error);
+      },
+    });
+  };
+  const onEditorClose = () => {
+    setOpenEditor(false);
+  };
+  const handleDeleteClick = (id: number) => {
+    setSelectedId(id);
+    setOpenDelete(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedId !== null) {
+      handleDeleteFishFarm(selectedId);
+    }
+    setOpenDelete(false);
+    setSelectedId(0);
+  };
 
   useEffect(() => {
     let map: Map | null = null;
@@ -99,11 +145,32 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
       <Grid2
         container
         size={{ xs: 12, md: 12 }}
-        sx={{ borderBottom: "solid 1px #dedede" }}
+        sx={{
+          borderBottom: "solid 1px #dedede",
+          display: "flex",
+          flesDirection: "row",
+          justifyContent: "space-between",
+        }}
       >
         <Typography sx={{ fontSize: "1.5rem", marginLeft: "10px" }}>
           {farm.name}
         </Typography>
+        <Box>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            onClick={() => setOpenEditor(true)}
+          >
+            <EditIcon fontSize="inherit" color="primary" />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            size="small"
+            onClick={() => handleDeleteClick(farm.id)}
+          >
+            <DeleteIcon fontSize="inherit" sx={{ color: "#f7347f" }} />
+          </IconButton>
+        </Box>
       </Grid2>
       <Grid2 container size={{ xs: 12, md: 12 }}>
         <Grid2
@@ -208,8 +275,30 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
           <WorkersList selectedFarmId={farm.id} />
         </Grid2>
       </Grid2>
+      <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this fish farm and all of its
+            workers?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDelete(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <FishFarmEditForm
+        open={openEditor}
+        onClose={onEditorClose}
+        fishFarm={farm}
+      />
     </Grid2>
   );
 };
 
-export default RightPane;
+export default FishFarmRightPane;

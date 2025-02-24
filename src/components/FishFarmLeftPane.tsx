@@ -12,7 +12,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import DirectionsBoatFilledIcon from "@mui/icons-material/DirectionsBoatFilled";
 
-const LeftPane: React.FC<LeftPaneProps> = ({
+const FishFarmLeftPane: React.FC<LeftPaneProps> = ({
   selectedFarmId,
   setSelectedFarmId,
   seteSelectedFarmData,
@@ -128,4 +128,4 @@ const LeftPane: React.FC<LeftPaneProps> = ({
   );
 };
 
-export default LeftPane;
+export default FishFarmLeftPane;

@@ -31,21 +31,19 @@ const WorkerForm: React.FC<WorkerFormProps> = ({ setMode }) => {
   const { data: workerPositions } = useWorkerPositions();
 
   const onSubmit = async (data: CreateWorkerDTO) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("age", data.age.toString());
-    formData.append("email", data.email);
-    formData.append("positionId", data.positionId.toString());
-    formData.append("certifiedUntil", data.certifiedUntil);
-    formData.append("fishFarmId", data.fishFarmId.toString());
+    const newWorkerData = new FormData();
+    newWorkerData.append("name", data.name);
+    newWorkerData.append("age", data.age.toString());
+    newWorkerData.append("email", data.email);
+    newWorkerData.append("positionId", data.positionId.toString());
+    newWorkerData.append("certifiedUntil", data.certifiedUntil);
+    newWorkerData.append("fishFarmId", data.fishFarmId.toString());
 
     if (selectedPicture) {
-      formData.append("picture", selectedPicture);
+      newWorkerData.append("picture", selectedPicture);
     }
 
-    console.log("Form Data:", Object.fromEntries(formData));
-
-    createWorkerMutation.mutate(formData, {
+    createWorkerMutation.mutate(newWorkerData, {
       onSuccess: () => {
         alert("Worker created successfully!");
         setMode("view");

@@ -102,3 +102,15 @@ export interface FishFarmFormData {
   hasBarge: boolean;
   picture: File | null;
 }
+
+export interface FishFarmLocationPickerProps {
+  open: boolean;
+  onClose: () => void;
+  onCoordinatesSelect: (coordinates: [number, number]) => void;
+}
+
+export interface FishFarmEditFormProps {
+  open: boolean;
+  onClose: () => void;
+  fishFarm: FishFarm | null;
+}

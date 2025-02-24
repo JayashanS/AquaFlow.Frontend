@@ -11,14 +11,9 @@ import { Vector as VectorLayer } from "ol/layer";
 import { Vector as VectorSource } from "ol/source";
 import { Style, Circle, Fill } from "ol/style";
 import "ol/ol.css";
+import { FishFarmLocationPickerProps } from "../interfaces/fishFarm";
 
-interface OpenLayersMapProps {
-  open: boolean;
-  onClose: () => void;
-  onCoordinatesSelect: (coordinates: [number, number]) => void;
-}
-
-const OpenLayersMap: React.FC<OpenLayersMapProps> = ({
+const OpenLayersMap: React.FC<FishFarmLocationPickerProps> = ({
   open,
   onClose,
   onCoordinatesSelect,

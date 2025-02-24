@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getWorkersByFilter,
   deleteWorkerById,
-  updateWorker,
+  updateWorkerById,
   createWorker,
 } from "../services/workerService";
 import { WorkerFilters, WorkerFilterResponse } from "../interfaces/worker";
@@ -11,6 +11,14 @@ export const useGetWorkersByFilter = (filters: WorkerFilters) => {
   return useQuery<WorkerFilterResponse>({
     queryKey: ["workers", filters],
     queryFn: () => getWorkersByFilter(filters),
+  });
+};
+
+export const useCreateWorker = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (newWorkerData: FormData) => createWorker(newWorkerData),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workers"] }),
   });
 };
 
@@ -27,19 +35,11 @@ export const useUpdateWorker = () => {
   return useMutation({
     mutationFn: ({
       workerId,
-      workerData,
+      updatedWorkerData,
     }: {
       workerId: number;
-      workerData: FormData;
-    }) => updateWorker(workerId, workerData),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workers"] }),
-  });
-};
-
-export const useCreateWorker = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (formData: FormData) => createWorker(formData),
+      updatedWorkerData: FormData;
+    }) => updateWorkerById(workerId, updatedWorkerData),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workers"] }),
   });
 };

@@ -3,7 +3,7 @@ import { FishFarmFilters } from "../interfaces/fishFarm";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const fetchFishFarms = async (filters: FishFarmFilters) => {
+export const getFishFarmsById = async (filters: FishFarmFilters) => {
   const params = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
@@ -14,7 +14,7 @@ export const fetchFishFarms = async (filters: FishFarmFilters) => {
 
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/FishFarm/getByFilter?${params.toString()}`
+      `${API_BASE_URL}/fishFarm/getByFilter?${params.toString()}`
     );
     return response.data;
   } catch (error) {
@@ -23,11 +23,11 @@ export const fetchFishFarms = async (filters: FishFarmFilters) => {
   }
 };
 
-export const createFishFarm = async (formData: FormData) => {
+export const createFishFarm = async (newFishFarmData: FormData) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/FishFarm/create`,
-      formData,
+      `${API_BASE_URL}/fishFarm/create`,
+      newFishFarmData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -39,5 +39,34 @@ export const createFishFarm = async (formData: FormData) => {
   } catch (error) {
     console.log(error);
     throw new Error("Failed to create fish farm");
+  }
+};
+
+export const deleteFishFarmById = async (fishFarmId: number): Promise<void> => {
+  try {
+    await axios.delete(`${API_BASE_URL}/fishFarm/deleteById/${fishFarmId}`);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to delete fish farm");
+  }
+};
+
+export const updateFishFarmById = async (
+  fishfarmID: number,
+  updatedFishFarm: FormData
+): Promise<void> => {
+  try {
+    await axios.put(
+      `${API_BASE_URL}/fishFarm/updateById/${fishfarmID}`,
+      updatedFishFarm,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to update fishfarm");
   }
 };

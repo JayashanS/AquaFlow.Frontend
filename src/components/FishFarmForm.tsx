@@ -34,40 +34,26 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
       alert("Please upload a picture.");
       return;
     }
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("latitude", data.latitude.toString());
-    formData.append("longitude", data.longitude.toString());
-    formData.append("numberOfCages", data.numberOfCages.toString());
-    formData.append("hasBarge", data.hasBarge.toString());
+    const newFishFarmData = new FormData();
+    newFishFarmData.append("name", data.name);
+    newFishFarmData.append("latitude", data.latitude.toString());
+    newFishFarmData.append("longitude", data.longitude.toString());
+    newFishFarmData.append("numberOfCages", data.numberOfCages.toString());
+    newFishFarmData.append("hasBarge", data.hasBarge.toString());
 
     if (selectedPicture) {
-      formData.append("picture", selectedPicture);
+      newFishFarmData.append("picture", selectedPicture);
     }
 
-    console.log("Form fields:", {
-      name: data.name,
-      latitude: data.latitude,
-      longitude: data.longitude,
-      numberOfCages: data.numberOfCages,
-      hasBarge: data.hasBarge,
-      picture: selectedPicture
-        ? {
-            name: selectedPicture.name,
-            type: selectedPicture.type,
-            size: selectedPicture.size,
-          }
-        : null,
-    });
-    createFishFarmMutation.mutate(formData, {
+    createFishFarmMutation.mutate(newFishFarmData, {
       onSuccess: () => {
         alert("Fish farm created successfully!");
+        setMode("view");
       },
       onError: (error) => {
         alert("Failed to create fish farm: " + error.message);
       },
     });
-    setMode("view");
   };
 
   const handleCoordinatesSelect = (coordinates: [number, number]) => {

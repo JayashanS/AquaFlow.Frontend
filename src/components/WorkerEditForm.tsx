@@ -23,9 +23,13 @@ import {
   // HandleFishFarmFilterChangeProps,
 } from "../interfaces/fishFarm";
 import ImageCropper from "./ImageCropper";
-import { WorkerModalProps } from "../interfaces/worker";
+import { WorkerEditFormProps } from "../interfaces/worker";
 
-const WorkerModal: React.FC<WorkerModalProps> = ({ open, onClose, worker }) => {
+const WorkerEditForm: React.FC<WorkerEditFormProps> = ({
+  open,
+  onClose,
+  worker,
+}) => {
   const { control, handleSubmit, reset, setValue } = useForm();
   const updateWorkerMutation = useUpdateWorker();
   // @ts-expect-error - state
@@ -35,19 +39,19 @@ const WorkerModal: React.FC<WorkerModalProps> = ({ open, onClose, worker }) => {
   const [selectedPicture, setSelectedPicture] = useState<File | null>(null);
 
   const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("age", data.age.toString());
-    formData.append("email", data.email);
-    formData.append("positionId", data.positionId.toString());
-    formData.append("certifiedUntil", data.certifiedUntil);
-    formData.append("fishFarmId", data.fishFarmId.toString());
+    const updatedWorkerData = new FormData();
+    updatedWorkerData.append("name", data.name);
+    updatedWorkerData.append("age", data.age.toString());
+    updatedWorkerData.append("email", data.email);
+    updatedWorkerData.append("positionId", data.positionId.toString());
+    updatedWorkerData.append("certifiedUntil", data.certifiedUntil);
+    updatedWorkerData.append("fishFarmId", data.fishFarmId.toString());
 
     if (selectedPicture) {
-      formData.append("picture", selectedPicture);
+      updatedWorkerData.append("picture", selectedPicture);
     }
     updateWorkerMutation.mutate(
-      { workerId: data.id, workerData: formData },
+      { workerId: data.id, updatedWorkerData: updatedWorkerData },
       {
         onSuccess: () => {
           alert("Worker updated successfully!");
@@ -99,7 +103,7 @@ const WorkerModal: React.FC<WorkerModalProps> = ({ open, onClose, worker }) => {
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{worker ? "Edit Worker" : "Create Worker"}</DialogTitle>
+      <DialogTitle>Edit Worker</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid2 size={{ xs: 12, md: 12 }} spacing={2}>
@@ -251,7 +255,7 @@ const WorkerModal: React.FC<WorkerModalProps> = ({ open, onClose, worker }) => {
               Cancel
             </Button>
             <Button type="submit" color="primary">
-              {worker ? "Update" : "Create"}
+              Update
             </Button>
           </DialogActions>
         </form>
@@ -260,4 +264,4 @@ const WorkerModal: React.FC<WorkerModalProps> = ({ open, onClose, worker }) => {
   );
 };
 
-export default WorkerModal;
+export default WorkerEditForm;

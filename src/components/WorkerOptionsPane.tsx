@@ -1,12 +1,12 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { OptionsPaneProps } from "../interfaces/worker";
+import { WorkerOptionsPaneProps } from "../interfaces/worker";
 import { Grid2, Paper, IconButton, InputBase, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchIcon from "@mui/icons-material/Search";
 
-const OptionsPane: React.FC<OptionsPaneProps> = ({
+const WorkerOptionsPane: React.FC<WorkerOptionsPaneProps> = ({
   mode,
   setMode,
   handleFilterChange,
@@ -81,4 +81,4 @@ const OptionsPane: React.FC<OptionsPaneProps> = ({
   );
 };
 
-export default OptionsPane;
+export default WorkerOptionsPane;

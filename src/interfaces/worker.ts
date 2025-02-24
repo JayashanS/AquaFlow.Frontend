@@ -61,7 +61,7 @@ export const getDefaultWorkerFilters = (): WorkerFilters => {
 
 export type Mode = "view" | "create" | "update";
 
-export interface OptionsPaneProps {
+export interface WorkerOptionsPaneProps {
   mode: Mode;
   setMode: (mode: Mode) => void;
   handleFilterChange: (props: HandleWorkerFilterChangeProps) => void;
@@ -80,7 +80,7 @@ export interface WorkerTableProps {
   onDelete: (id: number) => void;
 }
 
-export interface WorkerModalProps {
+export interface WorkerEditFormProps {
   open: boolean;
   onClose: () => void;
   worker: Worker | null;

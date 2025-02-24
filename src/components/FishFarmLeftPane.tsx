@@ -9,6 +9,7 @@ import {
   Typography,
   Pagination,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import DirectionsBoatFilledIcon from "@mui/icons-material/DirectionsBoatFilled";
 
 const LeftPane: React.FC<LeftPaneProps> = ({
@@ -25,6 +26,8 @@ const LeftPane: React.FC<LeftPaneProps> = ({
   ) => {
     handleFilterChange({ name: "pageNumber", value });
   };
+
+  const theme = useTheme();
 
   useEffect(() => {
     if (data?.fishFarms?.length) {
@@ -71,7 +74,11 @@ const LeftPane: React.FC<LeftPaneProps> = ({
                   key={farm.id}
                   sx={{
                     backgroundColor:
-                      farm.id === selectedFarmId ? "#c2e9ff" : "transparent",
+                      farm.id === selectedFarmId
+                        ? theme.palette.mode === "dark"
+                          ? "#666666"
+                          : "#c9eaff"
+                        : "transparent",
                     cursor: "pointer",
                   }}
                   disablePadding

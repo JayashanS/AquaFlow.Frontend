@@ -80,37 +80,41 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
         <TableHead>
           <TableRow>
             <TableCell>Picture</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Age</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Fish Farm</TableCell>
-            <TableCell>Position</TableCell>
-            <TableCell>Certified Until</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell align="left">Name</TableCell>
+            <TableCell align="center">Age</TableCell>
+            <TableCell align="center">Email</TableCell>
+            <TableCell align="center">Fish Farm</TableCell>
+            <TableCell align="center">Position</TableCell>
+            <TableCell align="center">Certified Until</TableCell>
+            <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {workers.map((worker) => (
             <TableRow key={worker.id} sx={{ height: "40px" }}>
-              <TableCell sx={{ padding: "4px" }}>
+              <TableCell align="center" sx={{ padding: "4px" }}>
                 <Avatar
                   alt={worker.name}
                   src={`http://localhost:5082/${worker.pictureUrl}`}
                 />
               </TableCell>
               <TableCell sx={{ padding: "4px" }}>{worker.name}</TableCell>
-              <TableCell sx={{ padding: "4px" }}>{worker.age}</TableCell>
-              <TableCell sx={{ padding: "4px" }}>{worker.email}</TableCell>
-              <TableCell sx={{ padding: "4px" }}>
+              <TableCell align="center" sx={{ padding: "4px" }}>
+                {worker.age}
+              </TableCell>
+              <TableCell align="center" sx={{ padding: "4px" }}>
+                {worker.email}
+              </TableCell>
+              <TableCell align="center" sx={{ padding: "4px" }}>
                 {worker.fishFarmName}
               </TableCell>
-              <TableCell sx={{ padding: "4px" }}>
+              <TableCell align="center" sx={{ padding: "4px" }}>
                 {worker.positionName}
               </TableCell>
-              <TableCell sx={{ padding: "4px" }}>
+              <TableCell align="center" sx={{ padding: "4px" }}>
                 {worker.certifiedUntil.split("T")[0]}
               </TableCell>
-              <TableCell sx={{ padding: "4px" }}>
+              <TableCell align="center" sx={{ padding: "4px" }}>
                 <IconButton
                   color="primary"
                   onClick={() => handleEditClick(worker)}

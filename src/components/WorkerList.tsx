@@ -39,7 +39,7 @@ const WorkerList: React.FC<WorkersListProps> = ({ selectedFarmId }) => {
   };
 
   return (
-    <div>
+    <div style={{ overflow: "auto", height: "100%" }}>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
         {isLoading && <p>Loading workers...</p>}
         {error && <p>Error fetching workers: {error.message}</p>}

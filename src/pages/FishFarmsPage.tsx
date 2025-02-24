@@ -15,7 +15,7 @@ import {
 import { Mode } from "../interfaces/fishFarm";
 import NoDataPage from "../components/NoData";
 
-const Dashboard: React.FC = () => {
+const FishFarmsPage: React.FC = () => {
   const [mode, setMode] = useState<Mode>("view");
   const [selectedFarmId, setSelectedFarmId] = useState<number>(1);
   const [selectedFarmData, setSelectedFarmData] = useState<
@@ -73,7 +73,6 @@ const Dashboard: React.FC = () => {
             <Grid2
               size={{ md: 12 }}
               sx={{
-                backgroundColor: "#f7f6f9",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -86,7 +85,6 @@ const Dashboard: React.FC = () => {
             <Grid2
               size={{ md: 12 }}
               sx={{
-                backgroundColor: "#f7f6f9",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -98,10 +96,13 @@ const Dashboard: React.FC = () => {
           ) : data?.fishFarms && data.fishFarms.length > 0 ? (
             <>
               <Grid2
-                size={{ md: 3 }}
+                size={{ md: 2 }}
                 sx={{
-                  backgroundColor: "#f7f6f9",
-                  display: { xs: "none", md: "block" },
+                  display: {
+                    xs: "none",
+                    md: "block",
+                    borderRight: "solid 1px #dedede",
+                  },
                 }}
               >
                 <LeftPane
@@ -114,9 +115,8 @@ const Dashboard: React.FC = () => {
                 />
               </Grid2>
               <Grid2
-                size={{ md: 9 }}
+                size={{ md: 10 }}
                 sx={{
-                  backgroundColor: "#ffffff",
                   overflow: "auto",
                   maxHeight: "95vh",
                   padding: { xs: "0 0 20px 20px", md: "40px" },
@@ -130,7 +130,6 @@ const Dashboard: React.FC = () => {
             <Grid2
               size={{ md: 12 }}
               sx={{
-                backgroundColor: "#f7f6f9",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -157,4 +156,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default FishFarmsPage;

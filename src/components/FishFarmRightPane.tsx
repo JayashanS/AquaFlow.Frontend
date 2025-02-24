@@ -204,7 +204,7 @@ const RightPane: React.FC<RightPaneProps> = ({ farm }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 container size={{ xs: 12, md: 4 }}>
+        <Grid2 container size={{ xs: 12, md: 4 }} sx={{ height: "100%" }}>
           <WorkersList selectedFarmId={farm.id} />
         </Grid2>
       </Grid2>

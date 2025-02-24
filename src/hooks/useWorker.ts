@@ -5,11 +5,7 @@ import {
   updateWorker,
   createWorker,
 } from "../services/workerService";
-import {
-  WorkerFilters,
-  UpdateWorkerDTO,
-  WorkerFilterResponse,
-} from "../interfaces/worker";
+import { WorkerFilters, WorkerFilterResponse } from "../interfaces/worker";
 
 export const useGetWorkersByFilter = (filters: WorkerFilters) => {
   return useQuery<WorkerFilterResponse>({
@@ -34,7 +30,7 @@ export const useUpdateWorker = () => {
       workerData,
     }: {
       workerId: number;
-      workerData: UpdateWorkerDTO;
+      workerData: FormData;
     }) => updateWorker(workerId, workerData),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workers"] }),
   });

@@ -68,13 +68,7 @@ const WorkersPage: React.FC = () => {
         />
       </Grid2>
       {mode === "view" && (
-        <Grid2
-          size={{ md: 12 }}
-          sx={{
-            backgroundColor: "#f7f6f9",
-            display: { xs: "none", md: "block" },
-          }}
-        >
+        <Grid2 size={{ md: 12 }}>
           {isLoading ? (
             <div>Loading...</div>
           ) : isError ? (

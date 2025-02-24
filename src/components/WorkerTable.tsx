@@ -15,30 +15,11 @@ import {
   DialogTitle,
   Button,
   TablePagination,
+  Avatar,
 } from "@mui/material";
-import { Delete } from "@mui/icons-material";
-import { HandleWorkerFilterChangeProps } from "../interfaces/worker";
-
-export interface Worker {
-  id: number;
-  name: string;
-  age: number;
-  email: string;
-  positionId: number;
-  certifiedUntil: string;
-  fishFarmId: number;
-  pictureUrl: string;
-}
-
-interface WorkerTableProps {
-  workers: Worker[];
-  totalCount: number;
-  page: number;
-  rowsPerPage: number;
-  onFilterChange: (params: HandleWorkerFilterChangeProps) => void;
-
-  onDelete: (id: number) => void;
-}
+import { Delete, Edit } from "@mui/icons-material";
+import { Worker, WorkerTableProps } from "../interfaces/worker";
+import WorkerEditForm from "./WorkerEditForm";
 
 const WorkerTable: React.FC<WorkerTableProps> = ({
   workers,
@@ -46,10 +27,11 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
   page,
   rowsPerPage,
   onFilterChange,
-
   onDelete,
 }) => {
   const [open, setOpen] = useState(false);
+  const [openEditor, setOpenEditor] = useState(false);
+  const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const handleDeleteClick = (id: number) => {
@@ -79,10 +61,20 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
     onFilterChange({ name: "pageNumber", value: 1 });
   };
 
+  const handleEditClick = (worker: Worker) => {
+    setSelectedWorker(worker);
+    setOpenEditor(true);
+  };
+
+  const onEditorClose = () => {
+    setOpenEditor(false);
+  };
+
   return (
     <TableContainer
       component={Paper}
-      sx={{ maxHeight: "80vh", overflow: "auto" }}
+      sx={{ height: "80vh", overflow: "auto", paddingBottom: "20px" }}
+      elevation={0}
     >
       <Table stickyHeader>
         <TableHead>
@@ -91,27 +83,42 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
             <TableCell>Name</TableCell>
             <TableCell>Age</TableCell>
             <TableCell>Email</TableCell>
+            <TableCell>Fish Farm</TableCell>
+            <TableCell>Position</TableCell>
             <TableCell>Certified Until</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {workers.map((worker) => (
-            <TableRow key={worker.id}>
-              <TableCell>
-                <img
-                  src={`http://localhost:5082/${worker.pictureUrl}`}
+            <TableRow key={worker.id} sx={{ height: "40px" }}>
+              <TableCell sx={{ padding: "4px" }}>
+                <Avatar
                   alt={worker.name}
-                  style={{ width: 50, height: 50, borderRadius: "50%" }}
+                  src={`http://localhost:5082/${worker.pictureUrl}`}
                 />
               </TableCell>
-              <TableCell>{worker.name}</TableCell>
-              <TableCell>{worker.age}</TableCell>
-              <TableCell>{worker.email}</TableCell>
-              <TableCell>{worker.certifiedUntil}</TableCell>
-              <TableCell>
+              <TableCell sx={{ padding: "4px" }}>{worker.name}</TableCell>
+              <TableCell sx={{ padding: "4px" }}>{worker.age}</TableCell>
+              <TableCell sx={{ padding: "4px" }}>{worker.email}</TableCell>
+              <TableCell sx={{ padding: "4px" }}>
+                {worker.fishFarmName}
+              </TableCell>
+              <TableCell sx={{ padding: "4px" }}>
+                {worker.positionName}
+              </TableCell>
+              <TableCell sx={{ padding: "4px" }}>
+                {worker.certifiedUntil.split("T")[0]}
+              </TableCell>
+              <TableCell sx={{ padding: "4px" }}>
                 <IconButton
-                  color="secondary"
+                  color="primary"
+                  onClick={() => handleEditClick(worker)}
+                >
+                  <Edit />
+                </IconButton>
+                <IconButton
+                  sx={{ color: "#f7347f" }}
                   onClick={() => handleDeleteClick(worker.id)}
                 >
                   <Delete />
@@ -146,6 +153,11 @@ const WorkerTable: React.FC<WorkerTableProps> = ({
           </Button>
         </DialogActions>
       </Dialog>
+      <WorkerEditForm
+        open={openEditor}
+        onClose={onEditorClose}
+        worker={selectedWorker}
+      />
     </TableContainer>
   );
 };

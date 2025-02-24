@@ -70,3 +70,18 @@ export interface OptionsPaneProps {
 export interface WorkerFormProps {
   setMode: (mode: Mode) => void;
 }
+
+export interface WorkerTableProps {
+  workers: Worker[];
+  totalCount: number;
+  page: number;
+  rowsPerPage: number;
+  onFilterChange: (params: HandleWorkerFilterChangeProps) => void;
+  onDelete: (id: number) => void;
+}
+
+export interface WorkerModalProps {
+  open: boolean;
+  onClose: () => void;
+  worker: Worker | null;
+}

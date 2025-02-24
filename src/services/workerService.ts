@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  WorkerFilters,
-  UpdateWorkerDTO,
-  WorkerFilterResponse,
-} from "../interfaces/worker";
+import { WorkerFilters, WorkerFilterResponse } from "../interfaces/worker";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -23,7 +19,7 @@ export const getWorkersByFilter = async (
 
 export const deleteWorkerById = async (workerId: number): Promise<void> => {
   try {
-    await axios.delete(`${API_URL}/worker/deleteUserById/${workerId}`);
+    await axios.delete(`${API_URL}/worker/deleteWorkerId/${workerId}`);
   } catch (error) {
     console.log(error);
     throw new Error("Failed to delete worker.");
@@ -32,10 +28,18 @@ export const deleteWorkerById = async (workerId: number): Promise<void> => {
 
 export const updateWorker = async (
   workerId: number,
-  workerData: UpdateWorkerDTO
+  workerData: FormData
 ): Promise<void> => {
   try {
-    await axios.put(`${API_URL}/${workerId}`, workerData);
+    await axios.put(
+      `${API_URL}/worker/updateWorkerById/${workerId}`,
+      workerData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
   } catch (error) {
     console.log(error);
     throw new Error("Failed to update worker.");

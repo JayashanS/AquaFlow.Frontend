@@ -3,27 +3,35 @@ import Map from "ol/Map";
 import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
-import { fromLonLat, transform } from "ol/proj";
+import { fromLonLat, transformExtent } from "ol/proj";
 import { Modal, Box, Button } from "@mui/material";
-import { Feature } from "ol";
-import { Point } from "ol/geom";
 import { Vector as VectorLayer } from "ol/layer";
 import { Vector as VectorSource } from "ol/source";
-import { Style, Circle, Fill } from "ol/style";
+import { Style, Fill, Stroke } from "ol/style";
+import { DragBox } from "ol/interaction";
+import { platformModifierKeyOnly } from "ol/events/condition";
 import "ol/ol.css";
-import { FishFarmLocationPickerProps } from "../interfaces/fishFarm";
+
+export interface FishFarmLocationPickerProps {
+  open: boolean;
+  onClose: () => void;
+  bounds: [number, number, number, number] | null;
+  onCoordinatesSelect: (coordinates: [number, number, number, number]) => void;
+}
 
 const LocationPicker: React.FC<FishFarmLocationPickerProps> = ({
   open,
   onClose,
+  bounds,
   onCoordinatesSelect,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
-  const [selectedCoordinates, setSelectedCoordinates] = useState<
-    [number, number] | null
-  >(null);
-  const vectorLayerRef = useRef<VectorLayer | null>(null);
+  const vectorLayerRef = useRef<VectorLayer<VectorSource> | null>(null);
+  const vectorSourceRef = useRef(new VectorSource());
+  const [selectedExtent, setSelectedExtent] = useState<
+    [number, number, number, number] | null
+  >(bounds);
 
   const initializeMap = () => {
     if (!mapRef.current) return;
@@ -47,10 +55,12 @@ const LocationPicker: React.FC<FishFarmLocationPickerProps> = ({
       }),
     });
 
-    const vectorSource = new VectorSource();
-
     const vectorLayer = new VectorLayer({
-      source: vectorSource,
+      source: vectorSourceRef.current,
+      style: new Style({
+        fill: new Fill({ color: "rgba(255, 0, 0, 0.3)" }),
+        stroke: new Stroke({ color: "red", width: 2 }),
+      }),
     });
 
     initialMap.addLayer(vectorLayer);
@@ -59,33 +69,22 @@ const LocationPicker: React.FC<FishFarmLocationPickerProps> = ({
 
     initialMap.setTarget(mapRef.current);
 
-    initialMap.on("click", (event) => {
-      const clickedCoord = initialMap.getCoordinateFromPixel(event.pixel);
-      const transformedCoord = transform(
-        clickedCoord,
+    const dragBox = new DragBox({
+      condition: platformModifierKeyOnly,
+    });
+
+    dragBox.on("boxend", () => {
+      const extent = dragBox.getGeometry().getExtent();
+      const transformedExtent = transformExtent(
+        extent,
         "EPSG:3857",
         "EPSG:4326"
       );
-      setSelectedCoordinates([transformedCoord[0], transformedCoord[1]]);
-
-      const marker = new Feature({
-        geometry: new Point(clickedCoord),
-      });
-
-      marker.setStyle(
-        new Style({
-          image: new Circle({
-            radius: 8,
-            fill: new Fill({
-              color: "red",
-            }),
-          }),
-        })
-      );
-
-      vectorSource.clear();
-      vectorSource.addFeature(marker);
+      console.log("Selected area corners:", transformedExtent);
+      setSelectedExtent(transformedExtent as [number, number, number, number]);
     });
+
+    initialMap.addInteraction(dragBox);
 
     setTimeout(() => {
       initialMap.updateSize();
@@ -103,15 +102,20 @@ const LocationPicker: React.FC<FishFarmLocationPickerProps> = ({
         mapInstanceRef.current.setTarget(undefined);
         mapInstanceRef.current = null;
       }
-      setSelectedCoordinates(null);
     }
   }, [open]);
 
   const handleAddCoordinates = () => {
-    if (selectedCoordinates) {
-      onCoordinatesSelect(selectedCoordinates);
+    if (selectedExtent) {
+      onCoordinatesSelect(selectedExtent);
       onClose();
     }
+  };
+
+  const handleClear = () => {
+    onCoordinatesSelect([0, 0, 0, 0]);
+    setSelectedExtent(null);
+    onClose();
   };
 
   const modalStyle = {
@@ -127,39 +131,28 @@ const LocationPicker: React.FC<FishFarmLocationPickerProps> = ({
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="map-modal-title"
-      keepMounted={false}
-    >
+    <Modal open={open} onClose={onClose} aria-labelledby="map-modal-title">
       <Box sx={modalStyle}>
         <div
           ref={mapRef}
-          style={{
-            width: "100%",
-            height: "400px",
-            marginBottom: "1rem",
-            visibility: open ? "visible" : "hidden",
-            backgroundColor: "#f0f0f0",
-          }}
+          style={{ width: "100%", height: "400px", marginBottom: "1rem" }}
         />
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-          <Button onClick={onClose} variant="outlined">
-            Cancel
+          <Button onClick={handleClear} variant="outlined">
+            Clear
           </Button>
           <Button
             onClick={handleAddCoordinates}
             variant="contained"
-            disabled={!selectedCoordinates}
+            disabled={!selectedExtent}
           >
-            Add Selected Location
+            Add Selected Area
           </Button>
         </Box>
-        {selectedCoordinates && (
+        {selectedExtent && (
           <Box sx={{ mt: 2 }}>
-            Selected coordinates: {selectedCoordinates[0].toFixed(6)},{" "}
-            {selectedCoordinates[1].toFixed(6)}
+            Selected area:{" "}
+            {selectedExtent.map((coord) => coord.toFixed(4)).join(", ")}
           </Box>
         )}
       </Box>

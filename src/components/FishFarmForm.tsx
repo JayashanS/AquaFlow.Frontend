@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 import ImageCropper from "./ImageCropper";
-import OpenLayersMap from "./FishFarmLocationPicker";
+import LocationPicker from "./FishFarmLocationPicker";
 import { useCreateFishFarm } from "../hooks/useFishFarms";
 import { FishFarmFormProps, FishFarmFormData } from "../interfaces/fishFarm";
 
@@ -203,7 +203,7 @@ const FishFarmForm: React.FC<FishFarmFormProps> = ({ setMode }) => {
         </Grid2>
       </Grid2>
 
-      <OpenLayersMap
+      <LocationPicker
         open={openMap}
         onClose={() => setOpenMap(false)}
         onCoordinatesSelect={handleCoordinatesSelect}

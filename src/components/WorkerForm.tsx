@@ -20,6 +20,7 @@ import {
   getDefaultFilters,
   HandleFishFarmFilterChangeProps,
 } from "../interfaces/fishFarm";
+import { checkEmail } from "../services/workerService";
 
 const WorkerForm: React.FC<WorkerFormProps> = ({ setMode }) => {
   const { control, handleSubmit, setValue } = useForm<CreateWorkerDTO>();
@@ -31,6 +32,10 @@ const WorkerForm: React.FC<WorkerFormProps> = ({ setMode }) => {
   const { data: workerPositions } = useWorkerPositions();
 
   const onSubmit = async (data: CreateWorkerDTO) => {
+    if (await checkEmail(data.email)) {
+      window.alert("Email already in use");
+      return;
+    }
     const newWorkerData = new FormData();
     newWorkerData.append("name", data.name);
     newWorkerData.append("age", data.age.toString());

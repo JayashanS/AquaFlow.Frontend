@@ -58,3 +58,13 @@ export const updateWorkerById = async (
     throw new Error("Failed to update worker.");
   }
 };
+
+export const checkEmail = async (email: string): Promise<boolean> => {
+  try {
+    const { data } = await axios.post(`${API_URL}/worker/checkEmail/${email}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to check email");
+  }
+};

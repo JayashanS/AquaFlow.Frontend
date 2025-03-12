@@ -4,6 +4,7 @@ import {
   deleteWorkerById,
   updateWorkerById,
   createWorker,
+  checkEmail,
 } from "../services/workerService";
 import { WorkerFilters, WorkerFilterResponse } from "../interfaces/worker";
 
@@ -42,4 +43,8 @@ export const useUpdateWorker = () => {
     }) => updateWorkerById(workerId, updatedWorkerData),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workers"] }),
   });
+};
+
+export const useCheckEmail = (email: string) => {
+  return checkEmail(email);
 };

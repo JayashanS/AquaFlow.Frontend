@@ -20,11 +20,12 @@ import { useWorkerPositions } from "../hooks/useWorkerPositions";
 import {
   FishFarmFilters,
   getDefaultFilters,
-  // HandleFishFarmFilterChangeProps,
+  HandleFishFarmFilterChangeProps,
 } from "../interfaces/fishFarm";
 import ImageCropper from "./ImageCropper";
 import { WorkerEditFormProps } from "../interfaces/worker";
 
+type Value = { fishFaimId: number; fishFarmName: string } | null;
 const WorkerEditForm: React.FC<WorkerEditFormProps> = ({
   open,
   onClose,
@@ -37,6 +38,11 @@ const WorkerEditForm: React.FC<WorkerEditFormProps> = ({
   const { data } = useFishFarms(filters);
   const { data: workerPositions } = useWorkerPositions();
   const [selectedPicture, setSelectedPicture] = useState<File | null>(null);
+  const [selectedFarm, setSelectedFarm] = useState<Value>(
+    worker
+      ? { fishFaimId: worker.fishFarmId, fishFarmName: worker.fishFarmName }
+      : null
+  );
 
   const onSubmit = async (data: any) => {
     const updatedWorkerData = new FormData();
@@ -84,15 +90,15 @@ const WorkerEditForm: React.FC<WorkerEditFormProps> = ({
     }
   }, [worker, reset, data]);
 
-  // const handleFilterChange = ({
-  //   name,
-  //   value,
-  // }: HandleFishFarmFilterChangeProps) => {
-  //   setFilters((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
+  const handleFilterChange = ({
+    name,
+    value,
+  }: HandleFishFarmFilterChangeProps) => {
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handlePictureChange = (croppedImage: File | null) => {
     if (croppedImage) {
@@ -247,6 +253,51 @@ const WorkerEditForm: React.FC<WorkerEditFormProps> = ({
                     />
                   )}
                 />
+              )}
+            />
+
+            <Autocomplete
+              // Try to find the matching object, but handle case where it's not in the data array
+              value={(() => {
+                // First try to find the matching object in data
+                const matchingOption = data.fishFarms.find(
+                  (item) => item.id === worker?.fishFarmId
+                );
+                if (matchingOption) return matchingOption;
+
+                // If not found but we have worker data, create a temporary object for display
+                if (worker?.fishFarmId && worker?.fishFarmName) {
+                  return {
+                    id: worker.fishFarmId,
+                    fishFarmName: worker.fishFarmName,
+                  };
+                }
+
+                // Fallback to null if nothing matches
+                return null;
+              })()}
+              onChange={(event, newValue) => {
+                const selectedId = newValue ? newValue.id : null;
+                const selectedName = newValue ? newValue.fishFarmName : "";
+
+                handleFilterChange({ name: "name", value: selectedName });
+              }}
+              onInputChange={(event, newInputValue) => {
+                handleFilterChange({ name: "name", value: newInputValue });
+              }}
+              id="fish-farm-autocomplete"
+              options={data.fishFarms}
+              getOptionLabel={(option) => {
+                return typeof option === "string"
+                  ? option
+                  : option.fishFarmName || "";
+              }}
+              isOptionEqualToValue={(option, value) => {
+                return option.id === value.id;
+              }}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Fish Farm" />
               )}
             />
           </Grid2>

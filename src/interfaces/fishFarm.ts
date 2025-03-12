@@ -58,7 +58,7 @@ export interface RightPaneProps {
 
 export interface HandleFishFarmFilterChangeProps {
   name: keyof FishFarmFilters;
-  value: string | number | boolean;
+  value: string | number | boolean | undefined;
 }
 
 export interface LeftPaneProps {

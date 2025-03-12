@@ -119,9 +119,13 @@ const FishFarmsPage: React.FC = () => {
                 size={{ md: 10 }}
                 sx={{
                   overflow: "auto",
-                  maxHeight: "95vh",
-                  padding: { xs: "0 0 20px 20px", md: "40px" },
+                  maxHeight: "75vh",
+                  padding: {
+                    xs: "0 0 20px 20px",
+                    md: "40px",
+                  },
                   flexGrow: 1,
+                  marginBottom: "200px",
                 }}
               >
                 {selectedFarmData && <RightPane farm={selectedFarmData} />}

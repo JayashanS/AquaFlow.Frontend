@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { OptionsPaneProps } from "../interfaces/fishFarm";
 import {
@@ -13,8 +13,10 @@ import {
   Box,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchIcon from "@mui/icons-material/Search";
+import FishFarmLocationFilter from "./FishFarmLocationFilter";
 
 const FishFarmOptionsPane: React.FC<OptionsPaneProps> = ({
   mode,
@@ -22,12 +24,75 @@ const FishFarmOptionsPane: React.FC<OptionsPaneProps> = ({
   handleFilterChange,
 }) => {
   const [cages, setCages] = useState<number>(0);
+  const [openMap, setOpenMap] = useState(false);
+  const [bounds, setBounds] = useState<[number, number, number, number] | null>(
+    null
+  );
 
   const handleCageChange = (_event: Event, newValue: number | number[]) => {
     const value = Array.isArray(newValue) ? newValue[0] : newValue;
     setCages(value);
     handleFilterChange({ name: "numberOfCages", value });
   };
+
+  const handleCoordinatesSelect = (
+    coordinates: [number, number, number, number]
+  ) => {
+    setBounds(coordinates);
+  };
+
+  useEffect(() => {
+    if (bounds) {
+      if (
+        bounds[0] == 0 &&
+        bounds[1] == 0 &&
+        bounds[2] == 0 &&
+        bounds[3] == 0
+      ) {
+        handleFilterChange({
+          name: "topRightLat",
+          value: undefined,
+        });
+
+        handleFilterChange({
+          name: "topRightLng",
+          value: undefined,
+        });
+
+        handleFilterChange({
+          name: "bottomLeftLat",
+          value: undefined,
+        });
+
+        handleFilterChange({
+          name: "bottomLeftLng",
+          value: undefined,
+        });
+        setBounds(null);
+        return;
+      }
+
+      handleFilterChange({
+        name: "topRightLat",
+        value: bounds[2] as number,
+      });
+
+      handleFilterChange({
+        name: "topRightLng",
+        value: bounds[3] as number,
+      });
+
+      handleFilterChange({
+        name: "bottomLeftLat",
+        value: bounds[0] as number,
+      });
+
+      handleFilterChange({
+        name: "bottomLeftLng",
+        value: bounds[1] as number,
+      });
+    }
+  }, [bounds]);
 
   return (
     <Grid2
@@ -120,6 +185,18 @@ const FishFarmOptionsPane: React.FC<OptionsPaneProps> = ({
                   sx={{ m: 0, ml: 1 }}
                 />
               </Box>
+              <Box>
+                {" "}
+                <IconButton onClick={() => setOpenMap(true)}>
+                  <MyLocationIcon />
+                </IconButton>
+              </Box>
+              <FishFarmLocationFilter
+                open={openMap}
+                onClose={() => setOpenMap(false)}
+                bounds={bounds}
+                onCoordinatesSelect={handleCoordinatesSelect}
+              />
             </Box>
           </>
         )}

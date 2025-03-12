@@ -70,7 +70,17 @@ const WorkersPage: React.FC = () => {
       {mode === "view" && (
         <Grid2 size={{ md: 12 }}>
           {isLoading ? (
-            <div>Loading...</div>
+            <Grid2
+              size={{ md: 12 }}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "30%",
+              }}
+            >
+              Loading...
+            </Grid2>
           ) : isError ? (
             <NoDataPage />
           ) : data?.workers && data.workers.length > 0 ? (

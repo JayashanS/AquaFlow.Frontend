@@ -255,51 +255,6 @@ const WorkerEditForm: React.FC<WorkerEditFormProps> = ({
                 />
               )}
             />
-
-            <Autocomplete
-              // Try to find the matching object, but handle case where it's not in the data array
-              value={(() => {
-                // First try to find the matching object in data
-                const matchingOption = data.fishFarms.find(
-                  (item) => item.id === worker?.fishFarmId
-                );
-                if (matchingOption) return matchingOption;
-
-                // If not found but we have worker data, create a temporary object for display
-                if (worker?.fishFarmId && worker?.fishFarmName) {
-                  return {
-                    id: worker.fishFarmId,
-                    fishFarmName: worker.fishFarmName,
-                  };
-                }
-
-                // Fallback to null if nothing matches
-                return null;
-              })()}
-              onChange={(event, newValue) => {
-                const selectedId = newValue ? newValue.id : null;
-                const selectedName = newValue ? newValue.fishFarmName : "";
-
-                handleFilterChange({ name: "name", value: selectedName });
-              }}
-              onInputChange={(event, newInputValue) => {
-                handleFilterChange({ name: "name", value: newInputValue });
-              }}
-              id="fish-farm-autocomplete"
-              options={data.fishFarms}
-              getOptionLabel={(option) => {
-                return typeof option === "string"
-                  ? option
-                  : option.fishFarmName || "";
-              }}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Fish Farm" />
-              )}
-            />
           </Grid2>
           <DialogActions>
             <Button onClick={onClose} color="secondary">

@@ -11,7 +11,7 @@ import Logo from "../assets/logo.svg";
 const NAVIGATION: Navigation = [
   {
     segment: "boats",
-    title: "Boats",
+    title: "Fish Farms",
     icon: (
       <div
         style={{

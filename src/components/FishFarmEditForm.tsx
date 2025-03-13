@@ -30,7 +30,7 @@ const WorkerModal: React.FC<FishFarmEditFormProps> = ({
     updatedFishFarmData.append("latitude", data.latitude.toString());
     updatedFishFarmData.append("longitude", data.longitude.toString());
     updatedFishFarmData.append("numberOfCages", data.numberOfCages.toString());
-    updatedFishFarmData.append("hasBarge", data.hasBarge.toString());
+    updatedFishFarmData.append("hasBarge", data.hasBarge ? "true" : "false");
 
     if (selectedPicture) {
       updatedFishFarmData.append("picture", selectedPicture);
@@ -159,10 +159,15 @@ const WorkerModal: React.FC<FishFarmEditFormProps> = ({
             <Controller
               name="hasBarge"
               control={control}
-              rules={{ required: "Certification date is required" }}
               render={({ field }) => (
                 <FormControlLabel
-                  control={<Checkbox {...field} checked={field.value} />}
+                  control={
+                    <Checkbox
+                      {...field}
+                      checked={Boolean(field.value)}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  }
                   label="Has Barge"
                 />
               )}
